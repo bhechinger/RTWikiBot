@@ -34,8 +34,25 @@ func getDefFiles(defType string) []string {
 
 func main() {
 	//"buildingdef",
+	files := getDefFiles("buildingdef")
+	fmt.Printf("Found '%d' BuildingDef files... ", len(files))
+	for f := range files {
+		fp, err := os.Open(files[f])
+		if err != nil {
+			panic(err)
+		}
+		defer fp.Close()
+		fileByte, _ := ioutil.ReadAll(fp)
+		def := BuildingDef{}
+		json.Unmarshal(fileByte, &def)
+		fp.Close()
+		BuildingDefs[def.Description.Name] = def
+	}
+	fmt.Printf("Loaded BuildingDefs: %d\n", len(BuildingDefs))
+
 	//"chassisdef",
-	files := getDefFiles("chassisdef")
+	files = getDefFiles("chassisdef")
+	fmt.Printf("Found '%d' ChassisDef files... ", len(files))
 	for f := range files {
 		fp, err := os.Open(files[f])
 		if err != nil {
@@ -51,10 +68,59 @@ func main() {
 	fmt.Printf("Loaded ChassisDefs: %d\n", len(ChassisDefs))
 
 	//"hardpointdatadef",
+	files = getDefFiles("hardpointdatadef")
+	fmt.Printf("Found '%d' HardPointDataDef files... ", len(files))
+	for f := range files {
+		fp, err := os.Open(files[f])
+		if err != nil {
+			panic(err)
+		}
+		defer fp.Close()
+		fileByte, _ := ioutil.ReadAll(fp)
+		def := HardPointDataDef{}
+		json.Unmarshal(fileByte, &def)
+		fp.Close()
+		HardPointDataDefs[def.ID] = def
+	}
+	fmt.Printf("Loaded HardPointDataDefs: %d\n", len(HardPointDataDefs))
+
 	//"heraldrydef",
+	files = getDefFiles("heraldrydef")
+	fmt.Printf("Found '%d' HeraldryDef files... ", len(files))
+	for f := range files {
+		fp, err := os.Open(files[f])
+		if err != nil {
+			panic(err)
+		}
+		defer fp.Close()
+		fileByte, _ := ioutil.ReadAll(fp)
+		def := HeraldryDef{}
+		json.Unmarshal(fileByte, &def)
+		fp.Close()
+		HeraldryDefs[def.Description.UIName] = def
+	}
+	fmt.Printf("Loaded HeraldryDefs: %d\n", len(HeraldryDefs))
+
 	//"lancedef",
+	files = getDefFiles("lancedef")
+	fmt.Printf("Found '%d' LanceDef files... ", len(files))
+	for f := range files {
+		fp, err := os.Open(files[f])
+		if err != nil {
+			panic(err)
+		}
+		defer fp.Close()
+		fileByte, _ := ioutil.ReadAll(fp)
+		def := LanceDef{}
+		json.Unmarshal(fileByte, &def)
+		fp.Close()
+		LanceDefs[def.Description.Name] = def
+	}
+	fmt.Printf("Loaded LanceDefs: %d\n", len(LanceDefs))
+
 	//"mechdef",
 	files = getDefFiles("mechdef")
+	fmt.Printf("Found '%d' MechDef files... ", len(files))
 	for f := range files {
 		fp, err := os.Open(files[f])
 		if err != nil {
@@ -70,9 +136,42 @@ func main() {
 	fmt.Printf("Loaded MechDefs: %d\n", len(MechDefs))
 
 	//"movedef",
+	files = getDefFiles("movedef")
+	fmt.Printf("Found '%d' MoveDef files... ", len(files))
+	for f := range files {
+		fp, err := os.Open(files[f])
+		if err != nil {
+			panic(err)
+		}
+		defer fp.Close()
+		fileByte, _ := ioutil.ReadAll(fp)
+		def := MoveDef{}
+		json.Unmarshal(fileByte, &def)
+		fp.Close()
+		MoveDefs[def.Description.Name] = def
+	}
+	fmt.Printf("Loaded MoveDefs: %d\n", len(MoveDefs))
+
 	//"pathingdef",
+	files = getDefFiles("pathingdef")
+	fmt.Printf("Found '%d' PathingDef files... ", len(files))
+	for f := range files {
+		fp, err := os.Open(files[f])
+		if err != nil {
+			panic(err)
+		}
+		defer fp.Close()
+		fileByte, _ := ioutil.ReadAll(fp)
+		def := PathingDef{}
+		json.Unmarshal(fileByte, &def)
+		fp.Close()
+		PathingDefs[def.Description.Name] = def
+	}
+	fmt.Printf("Loaded PathingDefs: %d\n", len(PathingDefs))
+
 	//"quirks",
 	files = getDefFiles("quirks")
+	fmt.Printf("Found '%d' Quirk files... ", len(files))
 	for f := range files {
 		fp, err := os.Open(files[f])
 		if err != nil {
@@ -88,13 +187,110 @@ func main() {
 	fmt.Printf("Loaded Quirks: %d\n", len(Quirks))
 
 	//"shopdef",
+	files = getDefFiles("shopdef")
+	fmt.Printf("Found '%d' ShopDef files... ", len(files))
+	for f := range files {
+		fp, err := os.Open(files[f])
+		if err != nil {
+			panic(err)
+		}
+		defer fp.Close()
+		fileByte, _ := ioutil.ReadAll(fp)
+		def := ShopDef{}
+		json.Unmarshal(fileByte, &def)
+		fp.Close()
+		ShopDefs[def.ID] = def
+	}
+	fmt.Printf("Loaded ShopDefs: %d\n", len(ShopDefs))
+
 	//"starsystemdef",
+	files = getDefFiles("starsystemdef")
+	fmt.Printf("Found '%d' StarSystemDef files... ", len(files))
+	for f := range files {
+		fp, err := os.Open(files[f])
+		if err != nil {
+			panic(err)
+		}
+		defer fp.Close()
+		fileByte, _ := ioutil.ReadAll(fp)
+		def := StarSystemDef{}
+		json.Unmarshal(fileByte, &def)
+		fp.Close()
+		StarSystemDefs[def.Description.Name] = def
+	}
+	fmt.Printf("Loaded StarSystemDefs: %d\n", len(StarSystemDefs))
+
 	//"turretchassisdef",
+	files = getDefFiles("turretchassisdef")
+	fmt.Printf("Found '%d' TurretChassisDefs files... ", len(files))
+	for f := range files {
+		fp, err := os.Open(files[f])
+		if err != nil {
+			panic(err)
+		}
+		defer fp.Close()
+		fileByte, _ := ioutil.ReadAll(fp)
+		def := TurretChassisDef{}
+		json.Unmarshal(fileByte, &def)
+		fp.Close()
+		TurretChassisDefs[def.Description.Name] = def
+	}
+	fmt.Printf("Loaded TurretChassisDefs: %d\n", len(TurretChassisDefs))
+
 	//"turretdef",
+	files = getDefFiles("turretdef")
+	fmt.Printf("Found '%d' TurretDef files... ", len(files))
+	for f := range files {
+		fp, err := os.Open(files[f])
+		if err != nil {
+			panic(err)
+		}
+		defer fp.Close()
+		fileByte, _ := ioutil.ReadAll(fp)
+		def := TurretDef{}
+		json.Unmarshal(fileByte, &def)
+		fp.Close()
+		TurretDefs[def.Description.Name] = def
+	}
+	fmt.Printf("Loaded TurretDefs: %d\n", len(TurretDefs))
+
 	//"vehiclechassisdef",
+	files = getDefFiles("vehiclechassisdef")
+	fmt.Printf("Found '%d' VehicleChassisDef files... ", len(files))
+	for f := range files {
+		fp, err := os.Open(files[f])
+		if err != nil {
+			panic(err)
+		}
+		defer fp.Close()
+		fileByte, _ := ioutil.ReadAll(fp)
+		def := VehicleChassisDef{}
+		json.Unmarshal(fileByte, &def)
+		fp.Close()
+		VehicleChassisDefs[def.Description.Name] = def
+	}
+	fmt.Printf("Loaded VehicleChassisDefs: %d\n", len(VehicleChassisDefs))
+
 	//"vehicledef",
+	files = getDefFiles("vehicledef")
+	fmt.Printf("Found '%d' VehicleDef files... ", len(files))
+	for f := range files {
+		fp, err := os.Open(files[f])
+		if err != nil {
+			panic(err)
+		}
+		defer fp.Close()
+		fileByte, _ := ioutil.ReadAll(fp)
+		def := VehicleDef{}
+		json.Unmarshal(fileByte, &def)
+		fp.Close()
+		VehicleDefs[def.Description.Name] = def
+	}
+	fmt.Printf("Loaded VehicleDefs: %d\n", len(VehicleDefs))
+
 	//"weapons",
 	files = getDefFiles("weapons")
+	fmt.Printf("Found '%d' Weapon files... ", len(files))
 	for f := range files {
 		fp, err := os.Open(files[f])
 		if err != nil {
