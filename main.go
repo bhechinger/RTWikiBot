@@ -9,8 +9,6 @@ import (
 	"regexp"
 )
 
-type Items map[string]map[string]interface{}
-
 func getDefFiles(defType string) []string {
 	pathS, err := os.Getwd()
 	if err != nil {
