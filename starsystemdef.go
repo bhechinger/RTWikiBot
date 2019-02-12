@@ -32,7 +32,7 @@ type StarSystemDef struct {
 	Position            struct {
 		X float64 `json:"x"`
 		Y float64 `json:"y"`
-		Z int64   `json:"z"`
+		Z float64 `json:"z"`
 	} `json:"Position"`
 	RoninHiringChance   int64       `json:"RoninHiringChance"`
 	ShopMaxInventory    int64       `json:"ShopMaxInventory"`

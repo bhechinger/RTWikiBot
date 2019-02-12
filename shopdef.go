@@ -16,6 +16,6 @@ type ShopDef struct {
 		DiscountModifier float64 `json:"DiscountModifier"`
 		ID               string  `json:"ID"`
 		Type             string  `json:"Type"`
-		Weight           int64   `json:"Weight"`
+		Weight           float64 `json:"Weight"`
 	} `json:"Specials"`
 }

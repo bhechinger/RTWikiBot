@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -42,8 +43,9 @@ func main() {
 		defer fp.Close()
 		fileByte, _ := ioutil.ReadAll(fp)
 		def := BuildingDef{}
-		err = json.Unmarshal(fileByte, &def)
+		err = json.Unmarshal(bytes.Trim(fileByte, "\xef\xbb\xbf"), &def)
 		if err != nil {
+			fmt.Println(files[f])
 			fmt.Println(err)
 		}
 		fp.Close()
@@ -62,8 +64,9 @@ func main() {
 		defer fp.Close()
 		fileByte, _ := ioutil.ReadAll(fp)
 		def := ChassisDef{}
-		err = json.Unmarshal(fileByte, &def)
+		err = json.Unmarshal(bytes.Trim(fileByte, "\xef\xbb\xbf"), &def)
 		if err != nil {
+			fmt.Println(files[f])
 			fmt.Println(err)
 		}
 		fp.Close()
@@ -82,7 +85,11 @@ func main() {
 		defer fp.Close()
 		fileByte, _ := ioutil.ReadAll(fp)
 		def := HardPointDataDef{}
-		json.Unmarshal(fileByte, &def)
+		err = json.Unmarshal(bytes.Trim(fileByte, "\xef\xbb\xbf"), &def)
+		if err != nil {
+			fmt.Println(files[f])
+			fmt.Println(err)
+		}
 		fp.Close()
 		HardPointDataDefs[def.ID] = def
 	}
@@ -99,7 +106,11 @@ func main() {
 		defer fp.Close()
 		fileByte, _ := ioutil.ReadAll(fp)
 		def := HeraldryDef{}
-		json.Unmarshal(fileByte, &def)
+		err = json.Unmarshal(bytes.Trim(fileByte, "\xef\xbb\xbf"), &def)
+		if err != nil {
+			fmt.Println(files[f])
+			fmt.Println(err)
+		}
 		fp.Close()
 		HeraldryDefs[def.Description.ID] = def
 	}
@@ -116,7 +127,11 @@ func main() {
 		defer fp.Close()
 		fileByte, _ := ioutil.ReadAll(fp)
 		def := LanceDef{}
-		json.Unmarshal(fileByte, &def)
+		err = json.Unmarshal(bytes.Trim(fileByte, "\xef\xbb\xbf"), &def)
+		if err != nil {
+			fmt.Println(files[f])
+			fmt.Println(err)
+		}
 		fp.Close()
 		LanceDefs[def.Description.Name] = def
 	}
@@ -133,7 +148,11 @@ func main() {
 		defer fp.Close()
 		fileByte, _ := ioutil.ReadAll(fp)
 		def := MechDef{}
-		json.Unmarshal(fileByte, &def)
+		err = json.Unmarshal(bytes.Trim(fileByte, "\xef\xbb\xbf"), &def)
+		if err != nil {
+			fmt.Println(files[f])
+			fmt.Println(err)
+		}
 		fp.Close()
 		MechDefs[def.Description.ID] = def
 	}
@@ -150,7 +169,11 @@ func main() {
 		defer fp.Close()
 		fileByte, _ := ioutil.ReadAll(fp)
 		def := MoveDef{}
-		json.Unmarshal(fileByte, &def)
+		err = json.Unmarshal(bytes.Trim(fileByte, "\xef\xbb\xbf"), &def)
+		if err != nil {
+			fmt.Println(files[f])
+			fmt.Println(err)
+		}
 		fp.Close()
 		MoveDefs[def.Description.Name] = def
 	}
@@ -167,7 +190,11 @@ func main() {
 		defer fp.Close()
 		fileByte, _ := ioutil.ReadAll(fp)
 		def := PathingDef{}
-		json.Unmarshal(fileByte, &def)
+		err = json.Unmarshal(bytes.Trim(fileByte, "\xef\xbb\xbf"), &def)
+		if err != nil {
+			fmt.Println(files[f])
+			fmt.Println(err)
+		}
 		fp.Close()
 		PathingDefs[def.Description.Name] = def
 	}
@@ -184,7 +211,11 @@ func main() {
 		defer fp.Close()
 		fileByte, _ := ioutil.ReadAll(fp)
 		def := Quirk{}
-		json.Unmarshal(fileByte, &def)
+		err = json.Unmarshal(bytes.Trim(fileByte, "\xef\xbb\xbf"), &def)
+		if err != nil {
+			fmt.Println(files[f])
+			fmt.Println(err)
+		}
 		fp.Close()
 		Quirks[def.Description.ID] = def
 	}
@@ -201,7 +232,11 @@ func main() {
 		defer fp.Close()
 		fileByte, _ := ioutil.ReadAll(fp)
 		def := ShopDef{}
-		json.Unmarshal(fileByte, &def)
+		err = json.Unmarshal(bytes.Trim(fileByte, "\xef\xbb\xbf"), &def)
+		if err != nil {
+			fmt.Println(files[f])
+			fmt.Println(err)
+		}
 		fp.Close()
 		ShopDefs[def.ID] = def
 	}
@@ -218,7 +253,11 @@ func main() {
 		defer fp.Close()
 		fileByte, _ := ioutil.ReadAll(fp)
 		def := StarSystemDef{}
-		json.Unmarshal(fileByte, &def)
+		err = json.Unmarshal(bytes.Trim(fileByte, "\xef\xbb\xbf"), &def)
+		if err != nil {
+			fmt.Println(files[f])
+			fmt.Println(err)
+		}
 		fp.Close()
 		StarSystemDefs[def.Description.Name] = def
 	}
@@ -235,7 +274,11 @@ func main() {
 		defer fp.Close()
 		fileByte, _ := ioutil.ReadAll(fp)
 		def := TurretChassisDef{}
-		json.Unmarshal(fileByte, &def)
+		err = json.Unmarshal(bytes.Trim(fileByte, "\xef\xbb\xbf"), &def)
+		if err != nil {
+			fmt.Println(files[f])
+			fmt.Println(err)
+		}
 		fp.Close()
 		TurretChassisDefs[def.Description.Name] = def
 	}
@@ -252,7 +295,11 @@ func main() {
 		defer fp.Close()
 		fileByte, _ := ioutil.ReadAll(fp)
 		def := TurretDef{}
-		json.Unmarshal(fileByte, &def)
+		err = json.Unmarshal(bytes.Trim(fileByte, "\xef\xbb\xbf"), &def)
+		if err != nil {
+			fmt.Println(files[f])
+			fmt.Println(err)
+		}
 		fp.Close()
 		TurretDefs[def.Description.Name] = def
 	}
@@ -269,7 +316,11 @@ func main() {
 		defer fp.Close()
 		fileByte, _ := ioutil.ReadAll(fp)
 		def := VehicleChassisDef{}
-		json.Unmarshal(fileByte, &def)
+		err = json.Unmarshal(bytes.Trim(fileByte, "\xef\xbb\xbf"), &def)
+		if err != nil {
+			fmt.Println(files[f])
+			fmt.Println(err)
+		}
 		fp.Close()
 		VehicleChassisDefs[def.Description.Name] = def
 	}
@@ -286,7 +337,11 @@ func main() {
 		defer fp.Close()
 		fileByte, _ := ioutil.ReadAll(fp)
 		def := VehicleDef{}
-		json.Unmarshal(fileByte, &def)
+		err = json.Unmarshal(bytes.Trim(fileByte, "\xef\xbb\xbf"), &def)
+		if err != nil {
+			fmt.Println(files[f])
+			fmt.Println(err)
+		}
 		fp.Close()
 		VehicleDefs[def.Description.Name] = def
 	}
@@ -303,7 +358,11 @@ func main() {
 		defer fp.Close()
 		fileByte, _ := ioutil.ReadAll(fp)
 		def := Weapon{}
-		json.Unmarshal(fileByte, &def)
+		err = json.Unmarshal(bytes.Trim(fileByte, "\xef\xbb\xbf"), &def)
+		if err != nil {
+			fmt.Println(files[f])
+			fmt.Println(err)
+		}
 		fp.Close()
 		Weapons[def.Description.ID] = def
 	}

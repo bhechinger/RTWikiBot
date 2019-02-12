@@ -7,17 +7,17 @@ type MoveDef struct {
 		ID      string `json:"Id"`
 		Name    string `json:"Name"`
 	} `json:"Description"`
-	LimpVelocity          int64 `json:"LimpVelocity"`
-	MaxJumpAccel          int64 `json:"MaxJumpAccel"`
-	MaxJumpVel            int64 `json:"MaxJumpVel"`
-	MaxJumpVerticalAccel  int64 `json:"MaxJumpVerticalAccel"`
-	MaxRadialAcceleration int64 `json:"MaxRadialAcceleration"`
-	MaxRadialVelocity     int64 `json:"MaxRadialVelocity"`
-	MaxSprintDistance     int64 `json:"MaxSprintDistance"`
-	MaxWalkDistance       int64 `json:"MaxWalkDistance"`
-	RunVelocity           int64 `json:"RunVelocity"`
-	SprintAcceleration    int64 `json:"SprintAcceleration"`
-	SprintVelocity        int64 `json:"SprintVelocity"`
-	WalkAcceleration      int64 `json:"WalkAcceleration"`
-	WalkVelocity          int64 `json:"WalkVelocity"`
+	LimpVelocity          float64 `json:"LimpVelocity"`
+	MaxJumpAccel          float64 `json:"MaxJumpAccel"`
+	MaxJumpVel            float64 `json:"MaxJumpVel"`
+	MaxJumpVerticalAccel  float64 `json:"MaxJumpVerticalAccel"`
+	MaxRadialAcceleration float64 `json:"MaxRadialAcceleration"`
+	MaxRadialVelocity     float64 `json:"MaxRadialVelocity"`
+	MaxSprintDistance     float64 `json:"MaxSprintDistance"`
+	MaxWalkDistance       float64 `json:"MaxWalkDistance"`
+	RunVelocity           float64 `json:"RunVelocity"`
+	SprintAcceleration    float64 `json:"SprintAcceleration"`
+	SprintVelocity        float64 `json:"SprintVelocity"`
+	WalkAcceleration      float64 `json:"WalkAcceleration"`
+	WalkVelocity          float64 `json:"WalkVelocity"`
 }

@@ -13,14 +13,14 @@ type VehicleChassisDef struct {
 	} `json:"Description"`
 	HardpointDataDefID string `json:"HardpointDataDefID"`
 	LOSSourcePositions []struct {
-		X int64 `json:"x"`
-		Y int64 `json:"y"`
-		Z int64 `json:"z"`
+		X float64 `json:"x"`
+		Y float64 `json:"y"`
+		Z float64 `json:"z"`
 	} `json:"LOSSourcePositions"`
 	LOSTargetPositions []struct {
-		X int64 `json:"x"`
-		Y int64 `json:"y"`
-		Z int64 `json:"z"`
+		X float64 `json:"x"`
+		Y float64 `json:"y"`
+		Z float64 `json:"z"`
 	} `json:"LOSTargetPositions"`
 	Locations []struct {
 		Hardpoints []struct {
@@ -33,18 +33,18 @@ type VehicleChassisDef struct {
 		MaxArmor          int64  `json:"MaxArmor"`
 		Tonnage           int64  `json:"Tonnage"`
 	} `json:"Locations"`
-	MovementCapDefID          string `json:"MovementCapDefID"`
-	PathingCapDefID           string `json:"PathingCapDefID"`
-	PrefabBase                string `json:"PrefabBase"`
-	PrefabIdentifier          string `json:"PrefabIdentifier"`
-	Radius                    int64  `json:"Radius"`
-	SensorRangeMultiplier     int64  `json:"SensorRangeMultiplier"`
-	Signature                 int64  `json:"Signature"`
-	SpotterDistanceMultiplier int64  `json:"SpotterDistanceMultiplier"`
-	Tonnage                   int64  `json:"Tonnage"`
-	TopSpeed                  int64  `json:"TopSpeed"`
-	TurnRadius                int64  `json:"TurnRadius"`
-	VisibilityMultiplier      int64  `json:"VisibilityMultiplier"`
-	MovementType              string `json:"movementType"`
-	WeightClass               string `json:"weightClass"`
+	MovementCapDefID          string  `json:"MovementCapDefID"`
+	PathingCapDefID           string  `json:"PathingCapDefID"`
+	PrefabBase                string  `json:"PrefabBase"`
+	PrefabIdentifier          string  `json:"PrefabIdentifier"`
+	Radius                    int64   `json:"Radius"`
+	SensorRangeMultiplier     float64 `json:"SensorRangeMultiplier"`
+	Signature                 float64 `json:"Signature"`
+	SpotterDistanceMultiplier float64 `json:"SpotterDistanceMultiplier"`
+	Tonnage                   int64   `json:"Tonnage"`
+	TopSpeed                  int64   `json:"TopSpeed"`
+	TurnRadius                int64   `json:"TurnRadius"`
+	VisibilityMultiplier      float64 `json:"VisibilityMultiplier"`
+	MovementType              string  `json:"movementType"`
+	WeightClass               string  `json:"weightClass"`
 }

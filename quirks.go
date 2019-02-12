@@ -44,7 +44,7 @@ type Quirk struct {
 	PrefabIdentifier    string      `json:"PrefabIdentifier"`
 	RelativeModifier    int64       `json:"RelativeModifier"`
 	StatName            interface{} `json:"StatName"`
-	Tonnage             int64       `json:"Tonnage"`
+	Tonnage             float64     `json:"Tonnage"`
 	StatusEffects       []struct {
 		Description struct {
 			Details string `json:"Details"`

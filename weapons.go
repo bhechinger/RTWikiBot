@@ -15,9 +15,9 @@ type Weapon struct {
 		Items            []string `json:"items"`
 		TagSetSourceFile string   `json:"tagSetSourceFile"`
 	} `json:"ComponentTags"`
-	ComponentType            string `json:"ComponentType"`
-	CriticalChanceMultiplier int64  `json:"CriticalChanceMultiplier"`
-	CriticalComponent        bool   `json:"CriticalComponent"`
+	ComponentType            string  `json:"ComponentType"`
+	CriticalChanceMultiplier float64 `json:"CriticalChanceMultiplier"`
+	CriticalComponent        bool    `json:"CriticalComponent"`
 	Custom                   struct {
 		BonusDescriptions struct {
 			Bonuses []string `json:"Bonuses"`
@@ -41,7 +41,7 @@ type Weapon struct {
 		UIName       string `json:"UIName"`
 	} `json:"Description"`
 	DisallowedLocations        string        `json:"DisallowedLocations"`
-	EvasiveDamageMultiplier    int64         `json:"EvasiveDamageMultiplier"`
+	EvasiveDamageMultiplier    float64       `json:"EvasiveDamageMultiplier"`
 	EvasivePipsIgnored         int64         `json:"EvasivePipsIgnored"`
 	HeatDamage                 int64         `json:"HeatDamage"`
 	HeatGenerated              int64         `json:"HeatGenerated"`
@@ -50,14 +50,14 @@ type Weapon struct {
 	InventorySize              int64         `json:"InventorySize"`
 	MaxRange                   int64         `json:"MaxRange"`
 	MinRange                   int64         `json:"MinRange"`
-	OverheatedDamageMultiplier int64         `json:"OverheatedDamageMultiplier"`
+	OverheatedDamageMultiplier float64       `json:"OverheatedDamageMultiplier"`
 	PrefabIdentifier           string        `json:"PrefabIdentifier"`
 	ProjectilesPerShot         int64         `json:"ProjectilesPerShot"`
 	RangeSplit                 []int64       `json:"RangeSplit"`
 	RefireModifier             int64         `json:"RefireModifier"`
 	ShotsWhenFired             int64         `json:"ShotsWhenFired"`
 	StartingAmmoCapacity       int64         `json:"StartingAmmoCapacity"`
-	Tonnage                    int64         `json:"Tonnage"`
+	Tonnage                    float64       `json:"Tonnage"`
 	Type                       string        `json:"Type"`
 	WeaponEffectID             string        `json:"WeaponEffectID"`
 	WeaponSubType              string        `json:"WeaponSubType"`

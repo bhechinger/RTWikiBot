@@ -11,10 +11,10 @@ type PathingDef struct {
 	GradeMultMaxDescending float64 `json:"GradeMultMaxDescending"`
 	GradeMultiplier        float64 `json:"GradeMultiplier"`
 	MaxGrade               float64 `json:"MaxGrade"`
-	MaxStairSize           int64   `json:"MaxStairSize"`
-	MaxSteepness           int64   `json:"MaxSteepness"`
+	MaxStairSize           float64 `json:"MaxStairSize"`
+	MaxSteepness           float64 `json:"MaxSteepness"`
 	MinGrade               float64 `json:"MinGrade"`
 	MoveCostBackward       float64 `json:"MoveCostBackward"`
 	MoveCostNormal         float64 `json:"MoveCostNormal"`
-	PathingAngleCost       int64   `json:"PathingAngleCost"`
+	PathingAngleCost       float64 `json:"PathingAngleCost"`
 }

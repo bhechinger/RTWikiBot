@@ -44,14 +44,14 @@ type ChassisDef struct {
 	Heatsinks          int64   `json:"Heatsinks"`
 	InitialTonnage     float64 `json:"InitialTonnage"`
 	LOSSourcePositions []struct {
-		X int64 `json:"x"`
-		Y int64 `json:"y"`
-		Z int64 `json:"z"`
+		X float64 `json:"x"`
+		Y float64 `json:"y"`
+		Z float64 `json:"z"`
 	} `json:"LOSSourcePositions"`
 	LOSTargetPositions []struct {
-		X int64 `json:"x"`
-		Y int64 `json:"y"`
-		Z int64 `json:"z"`
+		X float64 `json:"x"`
+		Y float64 `json:"y"`
+		Z float64 `json:"z"`
 	} `json:"LOSTargetPositions"`
 	Locations []struct {
 		Hardpoints []struct {

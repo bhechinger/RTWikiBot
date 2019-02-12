@@ -40,5 +40,5 @@ type MechDef struct {
 		HasPrefabName    bool        `json:"hasPrefabName"`
 		PrefabName       string      `json:"prefabName"`
 	} `json:"inventory"`
-	SimGameMechPartCost int64 `json:"simGameMechPartCost"`
+	SimGameMechPartCost float64 `json:"simGameMechPartCost"`
 }

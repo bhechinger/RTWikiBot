@@ -19,10 +19,10 @@
 	"MaxArmor": 500,
 	"MaxInternalStructure": 10,
 	"BattleValue": 100,
-	"SpotterDistanceMultiplier": 1,
-	"VisibilityMultiplier": 1,
-	"SensorRangeMultiplier": 1,
-	"Signature": 0,
+	"SpotterDistanceMultiplier": 1.2,
+	"VisibilityMultiplier": 1.2,
+	"SensorRangeMultiplier": 1.2,
+	"Signature": 1.2,
 	"Radius": 4,
 	"FiringArcDegrees": 360,
 	"Hardpoints": [
@@ -117,41 +117,16 @@
 	],
 	"LOSSourcePositions": [
 		{
-			"x": -4,
-			"y": 9,
-			"z": 0
-		},
-		{
-			"x": 4,
-			"y": 9,
-			"z": 0
+			"x": 1.2,
+			"y": 1.2,
+			"z": 1.2
 		}
 	],
 	"LOSTargetPositions": [
 		{
-			"x": -4,
-			"y": 9,
-			"z": 0
-		},
-		{
-			"x": 4,
-			"y": 9,
-			"z": 0
-		},
-		{
-			"x": 0,
-			"y": 9,
-			"z": -3
-		},
-		{
-			"x": 0,
-			"y": 9,
-			"z": 3
-		},
-		{
-			"x": 0.0,
-			"y": 4,
-			"z": 0
+			"x": 1.2,
+			"y": 1.2,
+			"z": 1.2
 		}
 	]
 }
