@@ -44,7 +44,7 @@ func main() {
 		def := BuildingDef{}
 		json.Unmarshal(fileByte, &def)
 		fp.Close()
-		BuildingDefs[def.Description.Name] = def
+		BuildingDefs[def.Description.ID] = def
 	}
 	fmt.Printf("Loaded BuildingDefs: %d\n", len(BuildingDefs))
 
@@ -61,7 +61,7 @@ func main() {
 		def := ChassisDef{}
 		json.Unmarshal(fileByte, &def)
 		fp.Close()
-		ChassisDefs[def.Description.UIName] = def
+		ChassisDefs[def.Description.ID] = def
 	}
 	fmt.Printf("Loaded ChassisDefs: %d\n", len(ChassisDefs))
 
@@ -95,7 +95,7 @@ func main() {
 		def := HeraldryDef{}
 		json.Unmarshal(fileByte, &def)
 		fp.Close()
-		HeraldryDefs[def.Description.UIName] = def
+		HeraldryDefs[def.Description.ID] = def
 	}
 	fmt.Printf("Loaded HeraldryDefs: %d\n", len(HeraldryDefs))
 
@@ -129,7 +129,7 @@ func main() {
 		def := MechDef{}
 		json.Unmarshal(fileByte, &def)
 		fp.Close()
-		MechDefs[def.Description.UIName] = def
+		MechDefs[def.Description.ID] = def
 	}
 	fmt.Printf("Loaded MechDefs: %d\n", len(MechDefs))
 
@@ -180,7 +180,7 @@ func main() {
 		def := Quirk{}
 		json.Unmarshal(fileByte, &def)
 		fp.Close()
-		Quirks[def.Description.UIName] = def
+		Quirks[def.Description.ID] = def
 	}
 	fmt.Printf("Loaded Quirks: %d\n", len(Quirks))
 
@@ -299,7 +299,7 @@ func main() {
 		def := Weapon{}
 		json.Unmarshal(fileByte, &def)
 		fp.Close()
-		Weapons[def.Description.UIName] = def
+		Weapons[def.Description.ID] = def
 	}
 	fmt.Printf("Loaded Weapons: %d\n", len(Weapons))
 }
