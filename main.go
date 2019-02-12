@@ -42,7 +42,10 @@ func main() {
 		defer fp.Close()
 		fileByte, _ := ioutil.ReadAll(fp)
 		def := BuildingDef{}
-		json.Unmarshal(fileByte, &def)
+		err = json.Unmarshal(fileByte, &def)
+		if err != nil {
+			fmt.Println(err)
+		}
 		fp.Close()
 		BuildingDefs[def.Description.ID] = def
 	}
@@ -59,7 +62,10 @@ func main() {
 		defer fp.Close()
 		fileByte, _ := ioutil.ReadAll(fp)
 		def := ChassisDef{}
-		json.Unmarshal(fileByte, &def)
+		err = json.Unmarshal(fileByte, &def)
+		if err != nil {
+			fmt.Println(err)
+		}
 		fp.Close()
 		ChassisDefs[def.Description.ID] = def
 	}

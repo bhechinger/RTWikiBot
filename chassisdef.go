@@ -3,8 +3,8 @@ package main
 type ChassisDef struct {
 	BattleValue int64 `json:"BattleValue"`
 	ChassisTags struct {
-		Items            []interface{} `json:"items"`
-		TagSetSourceFile string        `json:"tagSetSourceFile"`
+		Items            []string `json:"items"`
+		TagSetSourceFile string   `json:"tagSetSourceFile"`
 	} `json:"ChassisTags"`
 	Custom struct {
 		ArmActuatorSupport struct {
@@ -28,6 +28,18 @@ type ChassisDef struct {
 		Rarity       int64  `json:"Rarity"`
 		UIName       string `json:"UIName"`
 	} `json:"Description"`
+	FixedEquipment []struct {
+		ComponentDefID   string      `json:"ComponentDefID"`
+		ComponentDefType string      `json:"ComponentDefType"`
+		DamageLevel      string      `json:"DamageLevel"`
+		GUID             interface{} `json:"GUID"`
+		HardpointSlot    int64       `json:"HardpointSlot"`
+		IsFixed          bool        `json:"IsFixed"`
+		MountedLocation  string      `json:"MountedLocation"`
+		SimGameUID       string      `json:"SimGameUID"`
+		HasPrefabName    bool        `json:"hasPrefabName"`
+		PrefabName       string      `json:"prefabName"`
+	} `json:"FixedEquipment"`
 	HardpointDataDefID string  `json:"HardpointDataDefID"`
 	Heatsinks          int64   `json:"Heatsinks"`
 	InitialTonnage     float64 `json:"InitialTonnage"`
@@ -63,9 +75,9 @@ type ChassisDef struct {
 	PrefabIdentifier          string  `json:"PrefabIdentifier"`
 	PunchesWithLeftArm        bool    `json:"PunchesWithLeftArm"`
 	Radius                    int64   `json:"Radius"`
-	SensorRangeMultiplier     int64   `json:"SensorRangeMultiplier"`
-	Signature                 int64   `json:"Signature"`
-	SpotterDistanceMultiplier int64   `json:"SpotterDistanceMultiplier"`
+	SensorRangeMultiplier     float64 `json:"SensorRangeMultiplier"`
+	Signature                 float64 `json:"Signature"`
+	SpotterDistanceMultiplier float64 `json:"SpotterDistanceMultiplier"`
 	Stability                 int64   `json:"Stability"`
 	StabilityDefenses         []int64 `json:"StabilityDefenses"`
 	StockRole                 string  `json:"StockRole"`
@@ -73,7 +85,7 @@ type ChassisDef struct {
 	TopSpeed                  int64   `json:"TopSpeed"`
 	TurnRadius                int64   `json:"TurnRadius"`
 	VariantName               string  `json:"VariantName"`
-	VisibilityMultiplier      int64   `json:"VisibilityMultiplier"`
+	VisibilityMultiplier      float64 `json:"VisibilityMultiplier"`
 	YangsThoughts             string  `json:"YangsThoughts"`
 	WeightClass               string  `json:"weightClass"`
 }
