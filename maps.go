@@ -47,3 +47,9 @@ var VehicleDefs = map[string]VehicleDef{}
 
 //go:generate gojson -name Weapon -input json/weapons.json -o weapons.go
 var Weapons = map[string]Weapon{}
+
+//go:generate gojson -name EngineDef -input json/emod.json -o emod.go
+var EngineDefs = map[string]EngineDef{}
+
+//go:generate gojson -name HeatSinkDef -input json/heatsink.json -o heatsinkdef.go
+var HeatSinkDefs = map[string]HeatSinkDef{}
