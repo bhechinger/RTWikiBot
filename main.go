@@ -100,7 +100,8 @@ func generateTestMech(genmech string) {
 	mech.HardPoints.Energy = hardPoints["Energy"]
 	mech.HardPoints.Missile = hardPoints["Missile"]
 
-	var hsMultiplier int64 = 1
+	var engineMultiplier int64 = 1
+	var engine int64
 	for i := range mech.MechDef.Inventory {
 		item := mech.MechDef.Inventory[i]
 		if item.ComponentDefType == "Weapon" {
@@ -117,7 +118,7 @@ func generateTestMech(genmech string) {
 				} else {
 					engineRating, err := strconv.Atoi(EngineDefs[item.ComponentDefID].Custom.EngineCore.Rating)
 					if err == nil {
-						mech.HeatSink += int64(engineRating / 25)
+						engine = int64(engineRating/25) * 3
 					} else {
 						fmt.Printf("Error converting to int: %s\n", err.Error())
 					}
@@ -126,7 +127,7 @@ func generateTestMech(genmech string) {
 
 			if strings.Contains(item.ComponentDefID, "emod_kit") {
 				if strings.Contains(EngineDefs[item.ComponentDefID].Custom.Cooling.HeatSinkDefID, "Double") {
-					hsMultiplier = 2
+					engineMultiplier = 2
 				}
 
 			}
@@ -137,7 +138,7 @@ func generateTestMech(genmech string) {
 		}
 	}
 
-	mech.HeatSink *= hsMultiplier
+	mech.HeatSink += engineMultiplier * engine
 
 	template_text := `{&.MechDef.Description.UIName&}
 {| class="wikitable sortable mw-collapsible" style="background: black"
