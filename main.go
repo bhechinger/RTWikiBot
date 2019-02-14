@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"go.4amlunch.net/RTWikiBot/defs"
+	"math"
 	"os"
 	"strconv"
 	"strings"
@@ -20,6 +21,7 @@ func main() {
 
 	generateTestMech("mechdef_catapult_CPLT-P")
 	generateTestMech("mechdef_hatchetman_HCT-S7")
+	generateTestMech("mechdef_locust_LCT-2V")
 }
 
 type HardPoints struct {
@@ -41,6 +43,13 @@ type Mech struct {
 	Structure  int64
 	Armor      int64
 	HeatSink   int64
+	WalkDist   int64
+	SprintDist int64
+	JumpJets   int64
+	JumpDist   int64
+	HexWalk    int64
+	HexSprint  int64
+	HexJump    int64
 }
 
 func PrettyPrint(v interface{}) (err error) {
@@ -58,6 +67,8 @@ func generateTestMech(genmech string) {
 		MechDef:    mechdef,
 		ChassisDef: chassisdef,
 	}
+
+	var movement = &Movement{Tonnage: chassisdef.Tonnage}
 
 	feList := make(map[string]int)
 	for e := range mech.ChassisDef.FixedEquipment {
@@ -111,6 +122,9 @@ func generateTestMech(genmech string) {
 	var engine int64
 	for i := range mech.MechDef.Inventory {
 		item := mech.MechDef.Inventory[i]
+		if item.ComponentDefType == "JumpJet" {
+			mech.JumpJets += 1
+		}
 		if item.ComponentDefType == "Weapon" {
 			mech.Damage += Weapons[item.ComponentDefID].Damage
 			mech.Stability += Weapons[item.ComponentDefID].Instability
@@ -124,8 +138,9 @@ func generateTestMech(genmech string) {
 					mech.HeatSink += EngineDefs[item.ComponentDefID].Custom.EngineHeatBlock.HeatSinkCount
 				} else {
 					engineRating, err := strconv.Atoi(EngineDefs[item.ComponentDefID].Custom.EngineCore.Rating)
+					movement.Rating = int64(engineRating)
 					if err == nil {
-						engine = int64(engineRating/25) * 3
+						engine = int64(movement.Rating/25) * 3
 					} else {
 						fmt.Printf("Error converting to int: %s\n", err.Error())
 					}
@@ -146,6 +161,11 @@ func generateTestMech(genmech string) {
 	}
 
 	mech.HeatSink += engineMultiplier * engine
+	mech.WalkDist = movement.CalcWalkDistance()
+	mech.SprintDist = movement.CalcSprintDistance()
+	mech.HexWalk = int64(math.Round(float64(mech.WalkDist / 30)))
+	mech.HexSprint = int64(math.Round(float64(mech.SprintDist / 30)))
+	mech.JumpDist = mech.JumpJets * 30
 
 	template_text := `{&.MechDef.Description.UIName&}
 {| class="wikitable sortable mw-collapsible" style="background: black"
@@ -178,7 +198,7 @@ func generateTestMech(genmech string) {
 |{&.HeatSink&} Heatsinking, {&.Heat&} Alpha strike, 8 Jump, 110 Shutdown
 |-
 !style="color: grey" |Movement:
-|style="color: grey" |200 / 8 hex Sprint, 115 / 5 hex Walk, 150 Jump, 4 TT
+|style="color: grey" |{&.SprintDist&} / {&.HexSprint&} hex Sprint, {&.WalkDist&} / {&.HexWalk&} hex Walk, {&.JumpDist&} Jump, {&.JumpJets&}
 |-
 !style="color: silver" |Range:
 |580 max, 200 Opt (To be removed?)
