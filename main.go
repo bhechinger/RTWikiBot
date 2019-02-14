@@ -11,7 +11,13 @@ import (
 )
 
 func main() {
-	loadData()
+	loadChassisDefs()
+	loadMechDefs()
+	loadQuirkDefs()
+	loadWeaponDefs()
+	loadEngineDefs()
+	loadHeatSinkDefs()
+
 	generateTestMech("mechdef_catapult_CPLT-P")
 	generateTestMech("mechdef_hatchetman_HCT-S7")
 }
