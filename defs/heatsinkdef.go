@@ -1,4 +1,4 @@
-package main
+package defs
 
 type HeatSinkDef struct {
 	AllowedLocations string `json:"AllowedLocations"`

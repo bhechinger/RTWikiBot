@@ -1,4 +1,4 @@
-package main
+package defs
 
 type MechDef struct {
 	ChassisID   string `json:"ChassisID"`

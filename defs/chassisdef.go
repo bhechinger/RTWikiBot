@@ -1,4 +1,4 @@
-package main
+package defs
 
 type ChassisDef struct {
 	BattleValue int64 `json:"BattleValue"`

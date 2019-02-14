@@ -1,4 +1,4 @@
-package main
+package defs
 
 type HeraldryDef struct {
 	Description struct {

@@ -1,4 +1,4 @@
-package main
+package defs
 
 type TurretDef struct {
 	AssignedArmor            int64  `json:"AssignedArmor"`

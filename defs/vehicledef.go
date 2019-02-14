@@ -1,4 +1,4 @@
-package main
+package defs
 
 type VehicleDef struct {
 	ChassisID   string `json:"ChassisID"`

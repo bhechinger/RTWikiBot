@@ -1,4 +1,4 @@
-package main
+package defs
 
 type HardPointDataDef struct {
 	HardpointData []struct {

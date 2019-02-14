@@ -1,4 +1,4 @@
-package main
+package defs
 
 type StarSystemDef struct {
 	BlackMarketShopItems interface{} `json:"BlackMarketShopItems"`

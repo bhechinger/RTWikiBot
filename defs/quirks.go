@@ -1,4 +1,4 @@
-package main
+package defs
 
 type Quirk struct {
 	AbsoluteModifier int64  `json:"AbsoluteModifier"`

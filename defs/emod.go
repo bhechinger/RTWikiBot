@@ -1,4 +1,4 @@
-package main
+package defs
 
 type EngineDef struct {
 	AllowedLocations string `json:"AllowedLocations"`

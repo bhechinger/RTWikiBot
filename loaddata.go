@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"go.4amlunch.net/RTWikiBot/defs"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -41,7 +42,7 @@ func loadData() {
 	//		panic(err)
 	//	}
 	//	fileByte, _ := ioutil.ReadAll(fp)
-	//	def := BuildingDef{}
+	//	def := defs.BuildingDef{}
 	//	err = json.Unmarshal(bytes.Trim(fileByte, "\xef\xbb\xbf"), &def)
 	//	if err != nil {
 	//		fmt.Println(files[f])
@@ -61,7 +62,7 @@ func loadData() {
 			panic(err)
 		}
 		fileByte, _ := ioutil.ReadAll(fp)
-		def := ChassisDef{}
+		def := defs.ChassisDef{}
 		err = json.Unmarshal(bytes.Trim(fileByte, "\xef\xbb\xbf"), &def)
 		if err != nil {
 			fmt.Println(files[f])
@@ -81,7 +82,7 @@ func loadData() {
 	//		panic(err)
 	//	}
 	//	fileByte, _ := ioutil.ReadAll(fp)
-	//	def := HardPointDataDef{}
+	//	def := defs.HardPointDataDef{}
 	//	err = json.Unmarshal(bytes.Trim(fileByte, "\xef\xbb\xbf"), &def)
 	//	if err != nil {
 	//		fmt.Println(files[f])
@@ -101,7 +102,7 @@ func loadData() {
 	//		panic(err)
 	//	}
 	//	fileByte, _ := ioutil.ReadAll(fp)
-	//	def := HeraldryDef{}
+	//	def := defs.HeraldryDef{}
 	//	err = json.Unmarshal(bytes.Trim(fileByte, "\xef\xbb\xbf"), &def)
 	//	if err != nil {
 	//		fmt.Println(files[f])
@@ -121,7 +122,7 @@ func loadData() {
 	//		panic(err)
 	//	}
 	//	fileByte, _ := ioutil.ReadAll(fp)
-	//	def := LanceDef{}
+	//	def := defs.LanceDef{}
 	//	err = json.Unmarshal(bytes.Trim(fileByte, "\xef\xbb\xbf"), &def)
 	//	if err != nil {
 	//		fmt.Println(files[f])
@@ -141,7 +142,7 @@ func loadData() {
 			panic(err)
 		}
 		fileByte, _ := ioutil.ReadAll(fp)
-		def := MechDef{}
+		def := defs.MechDef{}
 		err = json.Unmarshal(bytes.Trim(fileByte, "\xef\xbb\xbf"), &def)
 		if err != nil {
 			fmt.Println(files[f])
@@ -161,7 +162,7 @@ func loadData() {
 	//		panic(err)
 	//	}
 	//	fileByte, _ := ioutil.ReadAll(fp)
-	//	def := MoveDef{}
+	//	def := defs.MoveDef{}
 	//	err = json.Unmarshal(bytes.Trim(fileByte, "\xef\xbb\xbf"), &def)
 	//	if err != nil {
 	//		fmt.Println(files[f])
@@ -181,7 +182,7 @@ func loadData() {
 	//		panic(err)
 	//	}
 	//	fileByte, _ := ioutil.ReadAll(fp)
-	//	def := PathingDef{}
+	//	def := defs.PathingDef{}
 	//	err = json.Unmarshal(bytes.Trim(fileByte, "\xef\xbb\xbf"), &def)
 	//	if err != nil {
 	//		fmt.Println(files[f])
@@ -201,7 +202,7 @@ func loadData() {
 			panic(err)
 		}
 		fileByte, _ := ioutil.ReadAll(fp)
-		def := Quirk{}
+		def := defs.Quirk{}
 		err = json.Unmarshal(bytes.Trim(fileByte, "\xef\xbb\xbf"), &def)
 		if err != nil {
 			fmt.Println(files[f])
@@ -221,7 +222,7 @@ func loadData() {
 	//		panic(err)
 	//	}
 	//	fileByte, _ := ioutil.ReadAll(fp)
-	//	def := ShopDef{}
+	//	def := defs.ShopDef{}
 	//	err = json.Unmarshal(bytes.Trim(fileByte, "\xef\xbb\xbf"), &def)
 	//	if err != nil {
 	//		fmt.Println(files[f])
@@ -241,7 +242,7 @@ func loadData() {
 	//		panic(err)
 	//	}
 	//	fileByte, _ := ioutil.ReadAll(fp)
-	//	def := StarSystemDef{}
+	//	def := defs.StarSystemDef{}
 	//	err = json.Unmarshal(bytes.Trim(fileByte, "\xef\xbb\xbf"), &def)
 	//	if err != nil {
 	//		fmt.Println(files[f])
@@ -261,7 +262,7 @@ func loadData() {
 	//		panic(err)
 	//	}
 	//	fileByte, _ := ioutil.ReadAll(fp)
-	//	def := TurretChassisDef{}
+	//	def := defs.TurretChassisDef{}
 	//	err = json.Unmarshal(bytes.Trim(fileByte, "\xef\xbb\xbf"), &def)
 	//	if err != nil {
 	//		fmt.Println(files[f])
@@ -281,7 +282,7 @@ func loadData() {
 	//		panic(err)
 	//	}
 	//	fileByte, _ := ioutil.ReadAll(fp)
-	//	def := TurretDef{}
+	//	def := defs.TurretDef{}
 	//	err = json.Unmarshal(bytes.Trim(fileByte, "\xef\xbb\xbf"), &def)
 	//	if err != nil {
 	//		fmt.Println(files[f])
@@ -301,7 +302,7 @@ func loadData() {
 	//		panic(err)
 	//	}
 	//	fileByte, _ := ioutil.ReadAll(fp)
-	//	def := VehicleChassisDef{}
+	//	def := defs.VehicleChassisDef{}
 	//	err = json.Unmarshal(bytes.Trim(fileByte, "\xef\xbb\xbf"), &def)
 	//	if err != nil {
 	//		fmt.Println(files[f])
@@ -321,7 +322,7 @@ func loadData() {
 	//		panic(err)
 	//	}
 	//	fileByte, _ := ioutil.ReadAll(fp)
-	//	def := VehicleDef{}
+	//	def := defs.VehicleDef{}
 	//	err = json.Unmarshal(bytes.Trim(fileByte, "\xef\xbb\xbf"), &def)
 	//	if err != nil {
 	//		fmt.Println(files[f])
@@ -341,7 +342,7 @@ func loadData() {
 			panic(err)
 		}
 		fileByte, _ := ioutil.ReadAll(fp)
-		def := Weapon{}
+		def := defs.Weapon{}
 		err = json.Unmarshal(bytes.Trim(fileByte, "\xef\xbb\xbf"), &def)
 		if err != nil {
 			fmt.Println(files[f])
@@ -361,7 +362,7 @@ func loadData() {
 			panic(err)
 		}
 		fileByte, _ := ioutil.ReadAll(fp)
-		def := EngineDef{}
+		def := defs.EngineDef{}
 		err = json.Unmarshal(bytes.Trim(fileByte, "\xef\xbb\xbf"), &def)
 		if err != nil {
 			fmt.Println(files[f])
@@ -381,7 +382,7 @@ func loadData() {
 			panic(err)
 		}
 		fileByte, _ := ioutil.ReadAll(fp)
-		def := HeatSinkDef{}
+		def := defs.HeatSinkDef{}
 		err = json.Unmarshal(bytes.Trim(fileByte, "\xef\xbb\xbf"), &def)
 		if err != nil {
 			fmt.Println(files[f])

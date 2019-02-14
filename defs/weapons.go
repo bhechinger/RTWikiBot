@@ -1,4 +1,4 @@
-package main
+package defs
 
 type Weapon struct {
 	AOECapable       bool   `json:"AOECapable"`

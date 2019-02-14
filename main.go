@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"go.4amlunch.net/RTWikiBot/defs"
 	"os"
 	"strconv"
 	"strings"
@@ -23,8 +24,8 @@ type HardPoints struct {
 }
 
 type Mech struct {
-	ChassisDef ChassisDef
-	MechDef    MechDef
+	ChassisDef defs.ChassisDef
+	MechDef    defs.MechDef
 	QuirkText  string
 	HardPoints HardPoints
 	Damage     int64

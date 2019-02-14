@@ -1,6 +1,6 @@
-package main
+package defs
 
-type VehicleChassisDef struct {
+type TurretChassisDef struct {
 	BattleValue int64 `json:"BattleValue"`
 	Description struct {
 		Cost        int64  `json:"Cost"`
@@ -11,7 +11,13 @@ type VehicleChassisDef struct {
 		Purchasable bool   `json:"Purchasable"`
 		Rarity      int64  `json:"Rarity"`
 	} `json:"Description"`
+	FiringArcDegrees   int64  `json:"FiringArcDegrees"`
 	HardpointDataDefID string `json:"HardpointDataDefID"`
+	Hardpoints         []struct {
+		Omni        bool   `json:"Omni"`
+		WeaponMount string `json:"WeaponMount"`
+	} `json:"Hardpoints"`
+	InventorySlots     int64 `json:"InventorySlots"`
 	LOSSourcePositions []struct {
 		X float64 `json:"x"`
 		Y float64 `json:"y"`
@@ -22,17 +28,8 @@ type VehicleChassisDef struct {
 		Y float64 `json:"y"`
 		Z float64 `json:"z"`
 	} `json:"LOSTargetPositions"`
-	Locations []struct {
-		Hardpoints []struct {
-			Omni        bool   `json:"Omni"`
-			WeaponMount string `json:"WeaponMount"`
-		} `json:"Hardpoints"`
-		InternalStructure int64  `json:"InternalStructure"`
-		InventorySlots    int64  `json:"InventorySlots"`
-		Location          string `json:"Location"`
-		MaxArmor          int64  `json:"MaxArmor"`
-		Tonnage           int64  `json:"Tonnage"`
-	} `json:"Locations"`
+	MaxArmor                  int64   `json:"MaxArmor"`
+	MaxInternalStructure      int64   `json:"MaxInternalStructure"`
 	MovementCapDefID          string  `json:"MovementCapDefID"`
 	PathingCapDefID           string  `json:"PathingCapDefID"`
 	PrefabBase                string  `json:"PrefabBase"`
@@ -42,9 +39,6 @@ type VehicleChassisDef struct {
 	Signature                 float64 `json:"Signature"`
 	SpotterDistanceMultiplier float64 `json:"SpotterDistanceMultiplier"`
 	Tonnage                   int64   `json:"Tonnage"`
-	TopSpeed                  int64   `json:"TopSpeed"`
-	TurnRadius                int64   `json:"TurnRadius"`
 	VisibilityMultiplier      float64 `json:"VisibilityMultiplier"`
-	MovementType              string  `json:"movementType"`
 	WeightClass               string  `json:"weightClass"`
 }
