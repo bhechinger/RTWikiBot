@@ -124,13 +124,16 @@ func generateTestMech(genmech string) {
 	var weaponHeat int64
 	for i := range mech.MechDef.Inventory {
 		item := mech.MechDef.Inventory[i]
+
+		jj := GearDefs[item.ComponentDefID].Custom.BonusDescriptions.Bonuses
+		if jj != nil {
+			PrettyPrint(jj)
+		}
+
 		if item.ComponentDefType == "JumpJet" {
 			mech.JumpJets += 1
-			jj := GearDefs[item.ComponentDefID].Custom.BonusDescriptions.Bonuses
-			if jj != nil {
-				PrettyPrint(jj)
-			}
 		}
+
 		if item.ComponentDefType == "Weapon" {
 			mech.Damage += Weapons[item.ComponentDefID].Damage
 			mech.Stability += Weapons[item.ComponentDefID].Instability
