@@ -53,5 +53,5 @@ var Weapons = map[string]defs.Weapon{}
 //go:generate gojson -name EngineDef -pkg defs -input json/emod.json -o defs/emod.go
 var EngineDefs = map[string]defs.EngineDef{}
 
-//go:generate gojson -name HeatSinkDef -pkg defs -input json/heatsink.json -o defs/heatsinkdef.go
-var HeatSinkDefs = map[string]defs.HeatSinkDef{}
+//go:generate gojson -name GearDef -pkg defs -input json/geardef.json -o defs/geardef.go
+var GearDefs = map[string]defs.GearDef{}

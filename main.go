@@ -17,11 +17,12 @@ func main() {
 	loadQuirkDefs()
 	loadWeaponDefs()
 	loadEngineDefs()
-	loadHeatSinkDefs()
+	loadGearDefs()
 
-	generateTestMech("mechdef_catapult_CPLT-P")
-	generateTestMech("mechdef_hatchetman_HCT-S7")
-	generateTestMech("mechdef_locust_LCT-2V")
+	generateTestMech("mechdef_phoenixhawk_PXH-IIC")
+	//generateTestMech("mechdef_catapult_CPLT-P")
+	//generateTestMech("mechdef_hatchetman_HCT-S7")
+	//generateTestMech("mechdef_locust_LCT-2V")
 }
 
 type HardPoints struct {
@@ -120,15 +121,20 @@ func generateTestMech(genmech string) {
 
 	var engineMultiplier int64 = 1
 	var engine int64
+	var weaponHeat int64
 	for i := range mech.MechDef.Inventory {
 		item := mech.MechDef.Inventory[i]
 		if item.ComponentDefType == "JumpJet" {
 			mech.JumpJets += 1
+			jj := GearDefs[item.ComponentDefID].Custom.BonusDescriptions.Bonuses
+			if jj != nil {
+				PrettyPrint(jj)
+			}
 		}
 		if item.ComponentDefType == "Weapon" {
 			mech.Damage += Weapons[item.ComponentDefID].Damage
 			mech.Stability += Weapons[item.ComponentDefID].Instability
-			mech.Heat += Weapons[item.ComponentDefID].HeatGenerated
+			weaponHeat += Weapons[item.ComponentDefID].HeatGenerated
 			mech.HeatDmg += Weapons[item.ComponentDefID].HeatDamage
 		}
 
@@ -155,11 +161,12 @@ func generateTestMech(genmech string) {
 			}
 
 			if strings.Contains(item.ComponentDefID, "Gear_HeatSink_") {
-				mech.HeatSink += HeatSinkDefs[item.ComponentDefID].DissipationCapacity
+				mech.HeatSink += GearDefs[item.ComponentDefID].DissipationCapacity
 			}
 		}
 	}
 
+	mech.Heat = weaponHeat
 	mech.HeatSink += engineMultiplier * engine
 	mech.WalkDist = movement.CalcWalkDistance()
 	mech.SprintDist = movement.CalcSprintDistance()

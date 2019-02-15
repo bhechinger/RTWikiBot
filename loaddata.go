@@ -389,23 +389,23 @@ func loadEngineDefs() {
 	fmt.Printf("Loaded Engines: %d\n", len(EngineDefs))
 }
 
-func loadHeatSinkDefs() {
-	files := getDefFiles("Gear_HeatSink")
-	fmt.Printf("Found '%d' HeatSink files... ", len(files))
+func loadGearDefs() {
+	files := getDefFiles("Gear_")
+	fmt.Printf("Found '%d' Gear files... ", len(files))
 	for f := range files {
 		fp, err := os.Open(files[f])
 		if err != nil {
 			panic(err)
 		}
 		fileByte, _ := ioutil.ReadAll(fp)
-		def := defs.HeatSinkDef{}
+		def := defs.GearDef{}
 		err = json.Unmarshal(bytes.Trim(fileByte, "\xef\xbb\xbf"), &def)
 		if err != nil {
 			fmt.Println(files[f])
 			fmt.Println(err)
 		}
 		fp.Close()
-		HeatSinkDefs[def.Description.ID] = def
+		GearDefs[def.Description.ID] = def
 	}
-	fmt.Printf("Loaded HeatSink: %d\n", len(HeatSinkDefs))
+	fmt.Printf("Loaded Gear: %d\n", len(GearDefs))
 }

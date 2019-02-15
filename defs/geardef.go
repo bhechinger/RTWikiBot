@@ -1,6 +1,6 @@
 package defs
 
-type HeatSinkDef struct {
+type GearDef struct {
 	AllowedLocations string `json:"AllowedLocations"`
 	BattleValue      int64  `json:"BattleValue"`
 	BonusValueA      string `json:"BonusValueA"`
