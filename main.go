@@ -176,12 +176,10 @@ func generateTestMech(genmech string) {
 	mech.HardPoints.Energy = hardPoints["Energy"]
 	mech.HardPoints.Missile = hardPoints["Missile"]
 
-	var engineMultiplier = 1
-	var engine int
+	var engineHeatSinkDC int
 	var weaponHeat int
 	for i := range mech.MechDef.Inventory {
 		item := mech.MechDef.Inventory[i]
-		//fmt.Printf("%+v\n", item)
 
 		bonuses := GearDefs[item.ComponentDefID].Custom.BonusDescriptions.Bonuses
 		if bonuses != nil {
@@ -221,20 +219,15 @@ func generateTestMech(genmech string) {
 					mech.HeatSink += int(EngineDefs[item.ComponentDefID].Custom.EngineHeatBlock.HeatSinkCount)
 				} else {
 					engineRating, err := strconv.Atoi(EngineDefs[item.ComponentDefID].Custom.EngineCore.Rating)
-					movement.Rating = int64(engineRating)
-					if err == nil {
-						engine = int(movement.Rating/25) * 3
-					} else {
+					if err != nil {
 						log.Fatal(err)
 					}
+					movement.Rating = int64(engineRating)
 				}
 			}
 
 			if strings.Contains(item.ComponentDefID, "emod_kit") {
-				if strings.Contains(EngineDefs[item.ComponentDefID].Custom.Cooling.HeatSinkDefID, "Double") {
-					engineMultiplier = 2
-				}
-
+				engineHeatSinkDC = int(GearDefs[EngineDefs[item.ComponentDefID].Custom.Cooling.HeatSinkDefID].DissipationCapacity)
 			}
 
 			if strings.Contains(item.ComponentDefID, "Gear_HeatSink_") {
@@ -244,7 +237,7 @@ func generateTestMech(genmech string) {
 	}
 
 	mech.Heat = bList.ApplyBonus("selfHeat", bList.ApplyBonus("weaponHeat", weaponHeat))
-	mech.HeatSink += engineMultiplier * engine
+	mech.HeatSink += int(movement.Rating/25) * engineHeatSinkDC
 	mech.Distance.Walk = bList.ApplyBonus("walk", int(movement.CalcWalkDistance()))
 	mech.Distance.Sprint = bList.ApplyBonus("run", int(movement.CalcSprintDistance()))
 	mech.Hex.Walk = int(math.Round(float64(mech.Distance.Walk / 30)))
