@@ -3,7 +3,9 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/gobuffalo/packr"
 	"go.4amlunch.net/RTWikiBot/defs"
+	"log"
 	"math"
 	"os"
 	"strconv"
@@ -19,9 +21,9 @@ func main() {
 	loadEngineDefs()
 	loadGearDefs()
 
-	generateTestMech("mechdef_phoenixhawk_PXH-IIC")
+	//generateTestMech("mechdef_phoenixhawk_PXH-IIC")
 	//generateTestMech("mechdef_catapult_CPLT-P")
-	//generateTestMech("mechdef_hatchetman_HCT-S7")
+	generateTestMech("mechdef_hatchetman_HCT-S7")
 	//generateTestMech("mechdef_locust_LCT-2V")
 }
 
@@ -33,24 +35,61 @@ type HardPoints struct {
 }
 
 type Mech struct {
-	ChassisDef defs.ChassisDef
-	MechDef    defs.MechDef
-	QuirkText  string
-	HardPoints HardPoints
-	Damage     int64
-	Stability  float64
-	Heat       int64
-	HeatDmg    int64
-	Structure  int64
-	Armor      int64
-	HeatSink   int64
-	WalkDist   int64
-	SprintDist int64
-	JumpJets   int64
-	JumpDist   int64
-	HexWalk    int64
-	HexSprint  int64
-	HexJump    int64
+	ChassisDef    defs.ChassisDef
+	MechDef       defs.MechDef
+	QuirkText     string
+	HardPoints    HardPoints
+	Damage        int
+	DFADamage     int
+	DFASelfDamage int
+	Melee         struct {
+		Bonus int
+		Total int
+	}
+	Stability float64
+	Heat      int
+	HeatDmg   int
+	Structure int
+	Armor     int
+	HeatSink  int
+	JumpJets  int
+	Distance  struct {
+		Walk   int
+		Sprint int
+		Jump   int
+	}
+	Hex struct {
+		Walk   int
+		Sprint int
+		Jump   int
+	}
+	JumpHeat   int
+	Shutdown   int
+	CAPName    string
+	StockRoles string
+}
+
+// Globals
+//var settings = loadSettings()
+var box = packr.NewBox("./templates")
+var heat = struct {
+	OverheatLevel    float64
+	MaxHeat          int
+	WalkHeat         int
+	SprintHeat       int
+	JumpHeatUnitSize float64
+	JumpHeatPerUnit  float64
+	JumpHeatMin      int
+	EngineDamageHeat int
+}{
+	0.41,
+	110,
+	3,
+	8,
+	6.5,
+	0.9,
+	3,
+	5,
 }
 
 func PrettyPrint(v interface{}) (err error) {
@@ -68,6 +107,8 @@ func generateTestMech(genmech string) {
 		MechDef:    mechdef,
 		ChassisDef: chassisdef,
 	}
+	mech.CAPName = strings.ToUpper(chassisdef.PrefabBase)
+	mech.StockRoles = strings.Replace(chassisdef.StockRole, " & ", "]] [[", -1)
 
 	var movement = &Movement{Tonnage: chassisdef.Tonnage}
 
@@ -102,7 +143,7 @@ func generateTestMech(genmech string) {
 	}
 
 	for l := range mech.MechDef.Locations {
-		mech.Armor += mech.MechDef.Locations[l].AssignedArmor
+		mech.Armor += int(mech.MechDef.Locations[l].AssignedArmor)
 	}
 
 	for l := range mech.ChassisDef.Locations {
@@ -111,7 +152,7 @@ func generateTestMech(genmech string) {
 			hardPoints[location.Hardpoints[hp].WeaponMount] += 1
 		}
 
-		mech.Structure += location.InternalStructure
+		mech.Structure += int(location.InternalStructure)
 	}
 
 	mech.HardPoints.AntiPersonnel = hardPoints["AntiPersonnel"]
@@ -119,15 +160,18 @@ func generateTestMech(genmech string) {
 	mech.HardPoints.Energy = hardPoints["Energy"]
 	mech.HardPoints.Missile = hardPoints["Missile"]
 
-	var engineMultiplier int64 = 1
-	var engine int64
-	var weaponHeat int64
+	bList := NewBonuses()
+	var engineMultiplier = 1
+	var engine int
+	var weaponHeat int
 	for i := range mech.MechDef.Inventory {
 		item := mech.MechDef.Inventory[i]
 
-		jj := GearDefs[item.ComponentDefID].Custom.BonusDescriptions.Bonuses
-		if jj != nil {
-			PrettyPrint(jj)
+		bonuses := GearDefs[item.ComponentDefID].Custom.BonusDescriptions.Bonuses
+		if bonuses != nil {
+			for b := range bonuses {
+				bList.AddBonus(bonuses[b])
+			}
 		}
 
 		if item.ComponentDefType == "JumpJet" {
@@ -135,23 +179,23 @@ func generateTestMech(genmech string) {
 		}
 
 		if item.ComponentDefType == "Weapon" {
-			mech.Damage += Weapons[item.ComponentDefID].Damage
+			mech.Damage += int(Weapons[item.ComponentDefID].Damage)
 			mech.Stability += Weapons[item.ComponentDefID].Instability
-			weaponHeat += Weapons[item.ComponentDefID].HeatGenerated
-			mech.HeatDmg += Weapons[item.ComponentDefID].HeatDamage
+			weaponHeat += int(Weapons[item.ComponentDefID].HeatGenerated)
+			mech.HeatDmg += int(Weapons[item.ComponentDefID].HeatDamage)
 		}
 
 		if item.ComponentDefType == "HeatSink" {
 			if strings.Contains(item.ComponentDefID, "emod_engine_") {
 				if strings.Contains(item.ComponentDefID, "emod_engine_cooling") {
-					mech.HeatSink += EngineDefs[item.ComponentDefID].Custom.EngineHeatBlock.HeatSinkCount
+					mech.HeatSink += int(EngineDefs[item.ComponentDefID].Custom.EngineHeatBlock.HeatSinkCount)
 				} else {
 					engineRating, err := strconv.Atoi(EngineDefs[item.ComponentDefID].Custom.EngineCore.Rating)
 					movement.Rating = int64(engineRating)
 					if err == nil {
-						engine = int64(movement.Rating/25) * 3
+						engine = int(movement.Rating/25) * 3
 					} else {
-						fmt.Printf("Error converting to int: %s\n", err.Error())
+						log.Fatal(err)
 					}
 				}
 			}
@@ -164,70 +208,41 @@ func generateTestMech(genmech string) {
 			}
 
 			if strings.Contains(item.ComponentDefID, "Gear_HeatSink_") {
-				mech.HeatSink += GearDefs[item.ComponentDefID].DissipationCapacity
+				mech.HeatSink += int(GearDefs[item.ComponentDefID].DissipationCapacity)
 			}
 		}
 	}
 
-	mech.Heat = weaponHeat
+	//PrettyPrint(bList.ApplyBonus("dfa", 1))
+	//PrettyPrint(bList.ApplyBonus("melee", 1))
+	//PrettyPrint(bList.ApplyBonus("meleeStab", 1))
+	//PrettyPrint(bList.ApplyBonus("targetHeat", 1))
+	mech.Heat = bList.ApplyBonus("selfHeat", bList.ApplyBonus("weaponHeat", weaponHeat))
 	mech.HeatSink += engineMultiplier * engine
-	mech.WalkDist = movement.CalcWalkDistance()
-	mech.SprintDist = movement.CalcSprintDistance()
-	mech.HexWalk = int64(math.Round(float64(mech.WalkDist / 30)))
-	mech.HexSprint = int64(math.Round(float64(mech.SprintDist / 30)))
-	mech.JumpDist = mech.JumpJets * 30
+	mech.Distance.Walk = bList.ApplyBonus("walk", int(movement.CalcWalkDistance()))
+	mech.Distance.Sprint = bList.ApplyBonus("run", int(movement.CalcSprintDistance()))
+	mech.Hex.Walk = int(math.Round(float64(mech.Distance.Walk / 30)))
+	mech.Hex.Sprint = int(math.Round(float64(mech.Distance.Sprint / 30)))
+	mech.Distance.Jump = bList.ApplyBonus("jump", mech.JumpJets*30)
+	//	13/6,5 * 0,9 +3
+	mech.JumpHeat = int(math.Round(float64(mech.JumpJets)/heat.JumpHeatUnitSize*heat.JumpHeatPerUnit + float64(heat.JumpHeatMin)))
+	mech.Shutdown = heat.MaxHeat
+	mech.DFADamage = bList.ApplyBonus("dfa", int(chassisdef.DFADamage))
+	mech.DFASelfDamage = bList.ApplyBonus("dfaSelf", int(chassisdef.DFASelfDamage))
+	mech.Melee.Bonus = bList.ApplyBonus("melee", int(chassisdef.MeleeDamage))
+	mech.Melee.Total = int(chassisdef.MeleeDamage) + mech.Melee.Bonus
 
-	template_text := `{&.MechDef.Description.UIName&}
-{| class="wikitable sortable mw-collapsible" style="background: black"
-|-
-!Name
-!Signature
-|'''FACTIONS (3039+)'''
-!Weight!!Class!!Hardpoints!!Current Quirks
-|-
-!{{FP icon|Catapult.jpg|CATAPULT}}
-|{&.ChassisDef.VariantName&}
-|
-*
-*
-*
-*
-*
-|{&.ChassisDef.Tonnage&}
-|{&.ChassisDef.WeightClass&}
-|{&.HardPoints.Ballistic&}B {&.HardPoints.Energy&}E {&.HardPoints.Missile&}M {&.HardPoints.AntiPersonnel&}S {&.ChassisDef.MaxJumpjets&}JJ
-|[[{&.ChassisDef.StockRole&}]]
-{&.QuirkText&}
-
-|}
-{| class="wikitable" style="background: black"
-!style="color: grey" | Firepower:
-|style="color: grey" |{&.Damage&} DMG, {&.HeatDmg&} Heat DMG, {&.Stability&} Stab.
-|-
-!style="color: silver" |Heat:
-|{&.HeatSink&} Heatsinking, {&.Heat&} Alpha strike, 8 Jump, 110 Shutdown
-|-
-!style="color: grey" |Movement:
-|style="color: grey" |{&.SprintDist&} / {&.HexSprint&} hex Sprint, {&.WalkDist&} / {&.HexWalk&} hex Walk, {&.JumpDist&} Jump, {&.JumpJets&}
-|-
-!style="color: silver" |Range:
-|580 max, 200 Opt (To be removed?)
-|-
-!style="color: grey" |Durability:
-|style="color: grey" |{&.Structure&} Structure, {&.Armor&} Armour, {&.ChassisDef.Stability&}% Stab Def, {&.ChassisDef.DFASelfDamage&} DFA Self DMG
-|-
-!style="color: silver" |Melee:
-|{&.ChassisDef.MeleeDamage&} Base DMG, -0 Quirk, 33 Total Dmg, {&.ChassisDef.MeleeInstability&} Stab., {&.ChassisDef.DFADamage&} DFA
-|}
-[[File:Catapult-CPLT-P.png|frameless|1316x1316px]]
-`
-
-	tmpl, err := template.New("test").Delims("{&", "&}").Parse(template_text)
+	templateText, err := box.FindString("mech.tmpl")
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
+	}
+
+	tmpl, err := template.New("test").Delims("{&", "&}").Parse(templateText)
+	if err != nil {
+		log.Fatal(err)
 	}
 	err = tmpl.Execute(os.Stdout, mech)
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 }

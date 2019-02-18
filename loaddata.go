@@ -32,6 +32,23 @@ func getDefFiles(defType string) []string {
 	return files
 }
 
+func loadSettings() defs.Settings {
+	fp, err := os.Open("../RTWikiBot/json/Settings.json")
+	if err != nil {
+		panic(err)
+	}
+	fileByte, _ := ioutil.ReadAll(fp)
+	def := defs.Settings{}
+	err = json.Unmarshal(bytes.Trim(fileByte, "\xef\xbb\xbf"), &def)
+	if err != nil {
+		fmt.Println("json/Settings.json")
+		fmt.Println(err)
+	}
+	fp.Close()
+
+	return def
+}
+
 func loadBuildingDefs() {
 	files := getDefFiles("buildingdef")
 	fmt.Printf("Found '%d' BuildingDef files... ", len(files))

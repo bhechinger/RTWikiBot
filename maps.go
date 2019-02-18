@@ -55,3 +55,5 @@ var EngineDefs = map[string]defs.EngineDef{}
 
 //go:generate gojson -name GearDef -pkg defs -input json/geardef.json -o defs/geardef.go
 var GearDefs = map[string]defs.GearDef{}
+
+//go:generate gojson -name Settings -pkg defs -input json/Settings.json -o defs/settings.go
