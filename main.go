@@ -18,6 +18,7 @@ func main() {
 	loadMechDefs()
 	loadQuirkDefs()
 	loadWeaponDefs()
+	loadAmmoDefs()
 	loadEngineDefs()
 	loadGearDefs()
 
@@ -46,7 +47,7 @@ type Mech struct {
 		Bonus int
 		Total int
 	}
-	Stability float64
+	Stability int
 	Heat      int
 	HeatDmg   int
 	Structure int
@@ -113,6 +114,16 @@ func generateTestMech(genmech string) {
 
 	var movement = &Movement{Tonnage: chassisdef.Tonnage}
 
+	var ammoType []string
+	// I hate having to do this twice but I really need Ammo before I do the rest
+	for i := range mech.MechDef.Inventory {
+		item := mech.MechDef.Inventory[i]
+
+		if item.ComponentDefType == "AmmunitionBox" {
+			ammoType = append(ammoType, item.ComponentDefID)
+		}
+	}
+
 	feList := make(map[string]int)
 	for e := range mech.ChassisDef.FixedEquipment {
 		feList[mech.ChassisDef.FixedEquipment[e].ComponentDefID] += 1
@@ -122,6 +133,9 @@ func generateTestMech(genmech string) {
 	for e := range feList {
 		qt.WriteString("* [[")
 		qt.WriteString(Quirks[e].Description.Name)
+		if Quirks[e].ComponentType == "AmmunitionBox" {
+			ammoType = append(ammoType, e)
+		}
 		qt.WriteString("]] x")
 		qt.WriteString(strconv.Itoa(feList[e]))
 		qt.WriteString("\n")
@@ -167,6 +181,7 @@ func generateTestMech(genmech string) {
 	var weaponHeat int
 	for i := range mech.MechDef.Inventory {
 		item := mech.MechDef.Inventory[i]
+		//fmt.Printf("%+v\n", item)
 
 		bonuses := GearDefs[item.ComponentDefID].Custom.BonusDescriptions.Bonuses
 		if bonuses != nil {
@@ -180,10 +195,24 @@ func generateTestMech(genmech string) {
 		}
 
 		if item.ComponentDefType == "Weapon" {
-			mech.Damage += int(Weapons[item.ComponentDefID].Damage)
-			mech.Stability += Weapons[item.ComponentDefID].Instability
+			// select Ammo (we pick the first because how else do we know?)
+			ammoBonuses := NewBonuses()
+			for at := range ammoType {
+				for ci := range AmmoDefs[ammoType[at]].Custom.Category {
+					ammo := fmt.Sprintf("%sAmmo", Weapons[item.ComponentDefID].AmmoCategory)
+					if AmmoDefs[ammoType[at]].Custom.Category[ci].CategoryID == ammo {
+						for ab := range AmmoDefs[ammoType[at]].Custom.BonusDescriptions.Bonuses {
+							ammoBonuses.AddBonus(AmmoDefs[ammoType[at]].Custom.BonusDescriptions.Bonuses[ab])
+						}
+						break
+					}
+				}
+			}
+
+			mech.Damage += ammoBonuses.ApplyBonus("targetDamage", int(Weapons[item.ComponentDefID].Damage)) * int(Weapons[item.ComponentDefID].ShotsWhenFired)
+			mech.HeatDmg += ammoBonuses.ApplyBonus("targetHeat", int(Weapons[item.ComponentDefID].HeatDamage)) * int(Weapons[item.ComponentDefID].ShotsWhenFired)
+			mech.Stability += ammoBonuses.ApplyBonus("targetStab", int(math.Round(Weapons[item.ComponentDefID].Instability))) * int(Weapons[item.ComponentDefID].ShotsWhenFired)
 			weaponHeat += int(Weapons[item.ComponentDefID].HeatGenerated)
-			mech.HeatDmg += int(Weapons[item.ComponentDefID].HeatDamage)
 		}
 
 		if item.ComponentDefType == "HeatSink" {

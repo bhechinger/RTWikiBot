@@ -11,15 +11,22 @@ import (
 	"regexp"
 )
 
-func getDefFiles(defType string) []string {
+func getDefFiles(defType string, quirk bool) []string {
+	var regexpstr string
 	pathS, err := os.Getwd()
 	if err != nil {
 		panic(err)
 	}
+
+	if quirk {
+		regexpstr = fmt.Sprintf("%s.*json$", defType)
+	} else {
+		regexpstr = fmt.Sprintf("%s[^/]*json$", defType)
+	}
 	var files []string
 	err = filepath.Walk(pathS, func(path string, f os.FileInfo, _ error) error {
 		if !f.IsDir() {
-			r, err := regexp.MatchString(fmt.Sprintf("%s.*json$", defType), path)
+			r, err := regexp.MatchString(regexpstr, path)
 			if err == nil && r {
 				files = append(files, path)
 			}
@@ -50,7 +57,7 @@ func loadSettings() defs.Settings {
 }
 
 func loadBuildingDefs() {
-	files := getDefFiles("buildingdef")
+	files := getDefFiles("buildingdef", false)
 	fmt.Printf("Found '%d' BuildingDef files... ", len(files))
 	for f := range files {
 		fp, err := os.Open(files[f])
@@ -71,7 +78,7 @@ func loadBuildingDefs() {
 }
 
 func loadChassisDefs() {
-	files := getDefFiles("chassisdef")
+	files := getDefFiles("chassisdef", false)
 	fmt.Printf("Found '%d' ChassisDef files... ", len(files))
 	for f := range files {
 		fp, err := os.Open(files[f])
@@ -92,7 +99,7 @@ func loadChassisDefs() {
 }
 
 func loadHardPointDataDefs() {
-	files := getDefFiles("hardpointdatadef")
+	files := getDefFiles("hardpointdatadef", false)
 	fmt.Printf("Found '%d' HardPointDataDef files... ", len(files))
 	for f := range files {
 		fp, err := os.Open(files[f])
@@ -113,7 +120,7 @@ func loadHardPointDataDefs() {
 }
 
 func loadHeraldryDefs() {
-	files := getDefFiles("heraldrydef")
+	files := getDefFiles("heraldrydef", false)
 	fmt.Printf("Found '%d' HeraldryDef files... ", len(files))
 	for f := range files {
 		fp, err := os.Open(files[f])
@@ -134,7 +141,7 @@ func loadHeraldryDefs() {
 }
 
 func loadLanceDefs() {
-	files := getDefFiles("lancedef")
+	files := getDefFiles("lancedef", false)
 	fmt.Printf("Found '%d' LanceDef files... ", len(files))
 	for f := range files {
 		fp, err := os.Open(files[f])
@@ -155,7 +162,7 @@ func loadLanceDefs() {
 }
 
 func loadMechDefs() {
-	files := getDefFiles("mechdef")
+	files := getDefFiles("mechdef", false)
 	fmt.Printf("Found '%d' MechDef files... ", len(files))
 	for f := range files {
 		fp, err := os.Open(files[f])
@@ -176,7 +183,7 @@ func loadMechDefs() {
 }
 
 func loadMoveDefs() {
-	files := getDefFiles("movedef")
+	files := getDefFiles("movedef", false)
 	fmt.Printf("Found '%d' MoveDef files... ", len(files))
 	for f := range files {
 		fp, err := os.Open(files[f])
@@ -197,7 +204,7 @@ func loadMoveDefs() {
 }
 
 func loadPathingDefs() {
-	files := getDefFiles("pathingdef")
+	files := getDefFiles("pathingdef", false)
 	fmt.Printf("Found '%d' PathingDef files... ", len(files))
 	for f := range files {
 		fp, err := os.Open(files[f])
@@ -218,7 +225,7 @@ func loadPathingDefs() {
 }
 
 func loadQuirkDefs() {
-	files := getDefFiles("quirks")
+	files := getDefFiles("quirks", true)
 	fmt.Printf("Found '%d' Quirk files... ", len(files))
 	for f := range files {
 		fp, err := os.Open(files[f])
@@ -239,7 +246,7 @@ func loadQuirkDefs() {
 }
 
 func loadShopDefs() {
-	files := getDefFiles("shopdef")
+	files := getDefFiles("shopdef", false)
 	fmt.Printf("Found '%d' ShopDef files... ", len(files))
 	for f := range files {
 		fp, err := os.Open(files[f])
@@ -260,7 +267,7 @@ func loadShopDefs() {
 }
 
 func loadStarSystemDefs() {
-	files := getDefFiles("starsystemdef")
+	files := getDefFiles("starsystemdef", false)
 	fmt.Printf("Found '%d' StarSystemDef files... ", len(files))
 	for f := range files {
 		fp, err := os.Open(files[f])
@@ -281,7 +288,7 @@ func loadStarSystemDefs() {
 }
 
 func loadTurretChassisDefs() {
-	files := getDefFiles("turretchassisdef")
+	files := getDefFiles("turretchassisdef", false)
 	fmt.Printf("Found '%d' TurretChassisDefs files... ", len(files))
 	for f := range files {
 		fp, err := os.Open(files[f])
@@ -302,7 +309,7 @@ func loadTurretChassisDefs() {
 }
 
 func loadTurretDefs() {
-	files := getDefFiles("turretdef")
+	files := getDefFiles("turretdef", false)
 	fmt.Printf("Found '%d' TurretDef files... ", len(files))
 	for f := range files {
 		fp, err := os.Open(files[f])
@@ -323,7 +330,7 @@ func loadTurretDefs() {
 }
 
 func loadVehicleChassisDefs() {
-	files := getDefFiles("vehiclechassisdef")
+	files := getDefFiles("vehiclechassisdef", false)
 	fmt.Printf("Found '%d' VehicleChassisDef files... ", len(files))
 	for f := range files {
 		fp, err := os.Open(files[f])
@@ -344,7 +351,7 @@ func loadVehicleChassisDefs() {
 }
 
 func loadVehicleDefs() {
-	files := getDefFiles("vehicledef")
+	files := getDefFiles("vehicledef", false)
 	fmt.Printf("Found '%d' VehicleDef files... ", len(files))
 	for f := range files {
 		fp, err := os.Open(files[f])
@@ -365,7 +372,7 @@ func loadVehicleDefs() {
 }
 
 func loadWeaponDefs() {
-	files := getDefFiles("weapons")
+	files := getDefFiles("Weapon_", false)
 	fmt.Printf("Found '%d' Weapon files... ", len(files))
 	for f := range files {
 		fp, err := os.Open(files[f])
@@ -385,8 +392,29 @@ func loadWeaponDefs() {
 	fmt.Printf("Loaded Weapons: %d\n", len(Weapons))
 }
 
+func loadAmmoDefs() {
+	files := getDefFiles("Ammo_", false)
+	fmt.Printf("Found '%d' Ammo files... ", len(files))
+	for f := range files {
+		fp, err := os.Open(files[f])
+		if err != nil {
+			panic(err)
+		}
+		fileByte, _ := ioutil.ReadAll(fp)
+		def := defs.AmmoDef{}
+		err = json.Unmarshal(bytes.Trim(fileByte, "\xef\xbb\xbf"), &def)
+		if err != nil {
+			fmt.Println(files[f])
+			fmt.Println(err)
+		}
+		fp.Close()
+		AmmoDefs[def.Description.ID] = def
+	}
+	fmt.Printf("Loaded Ammo: %d\n", len(AmmoDefs))
+}
+
 func loadEngineDefs() {
-	files := getDefFiles("emod")
+	files := getDefFiles("emod", false)
 	fmt.Printf("Found '%d' Engine files... ", len(files))
 	for f := range files {
 		fp, err := os.Open(files[f])
@@ -407,7 +435,7 @@ func loadEngineDefs() {
 }
 
 func loadGearDefs() {
-	files := getDefFiles("Gear_")
+	files := getDefFiles("Gear_", false)
 	fmt.Printf("Found '%d' Gear files... ", len(files))
 	for f := range files {
 		fp, err := os.Open(files[f])

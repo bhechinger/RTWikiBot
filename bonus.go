@@ -62,12 +62,18 @@ func NewBonuses() Bonuses {
 	bonuses.affects["meleeStab"] = NewStringSet()
 	bonuses.affects["meleeStab"].Add("MeleeStab")
 
+	bonuses.affects["targetDamage"] = NewStringSet()
+	bonuses.affects["targetDamage"].Add("LRMDamage")
+
 	bonuses.affects["targetHeat"] = NewStringSet()
 	bonuses.affects["targetHeat"].Add("Inferno")
 	bonuses.affects["targetHeat"].Add("ThermoBurn")
 	bonuses.affects["targetHeat"].Add("InfernoIV")
 	bonuses.affects["targetHeat"].Add("ImpHeatSink")
 	bonuses.affects["targetHeat"].Add("HeatDamage")
+
+	bonuses.affects["targetStab"] = NewStringSet()
+	bonuses.affects["targetStab"].Add("StabDamage")
 
 	bonuses.affects["selfHeat"] = NewStringSet()
 	bonuses.affects["selfHeat"].Add("HeatGenerated")
@@ -138,6 +144,8 @@ func (b *Bonuses) AddBonus(bonus string) {
 		newBonus.Direction = Add
 	} else {
 		if newBonus.Type == Percentage {
+			newBonus.Direction = Add
+		} else if newBonus.Name == "Inferno" {
 			newBonus.Direction = Add
 		} else {
 			newBonus.Direction = Base
