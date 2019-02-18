@@ -84,8 +84,6 @@ func (b Bonuses) ApplyBonus(bonusGroup string, stat int) int {
 	bonuses := b.GetBonus(bonusGroup)
 
 	for b := range bonuses {
-		fmt.Printf("%v\n", bonuses[b])
-
 		if bonuses[b].Type == Percentage && bonuses[b].Direction == Add {
 			newStat += newStat * float64(bonuses[b].Value) / 100
 		} else if bonuses[b].Type == Percentage && bonuses[b].Direction == Subtract {

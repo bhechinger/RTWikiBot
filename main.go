@@ -21,10 +21,10 @@ func main() {
 	loadEngineDefs()
 	loadGearDefs()
 
-	//generateTestMech("mechdef_phoenixhawk_PXH-IIC")
-	//generateTestMech("mechdef_catapult_CPLT-P")
+	generateTestMech("mechdef_phoenixhawk_PXH-IIC")
+	generateTestMech("mechdef_catapult_CPLT-P")
 	generateTestMech("mechdef_hatchetman_HCT-S7")
-	//generateTestMech("mechdef_locust_LCT-2V")
+	generateTestMech("mechdef_locust_LCT-2V")
 }
 
 type HardPoints struct {
@@ -101,6 +101,7 @@ func PrettyPrint(v interface{}) (err error) {
 }
 
 func generateTestMech(genmech string) {
+	bList := NewBonuses()
 	mechdef := MechDefs[genmech]
 	chassisdef := ChassisDefs[mechdef.ChassisID]
 	mech := &Mech{
@@ -127,6 +128,7 @@ func generateTestMech(genmech string) {
 
 		bonuses := Quirks[e].Custom.BonusDescriptions.Bonuses
 		for q := range bonuses {
+			bList.AddBonus(bonuses[q])
 			qt.WriteString("** ")
 			qt.WriteString(bonuses[q])
 			qt.WriteString("\n")
@@ -160,7 +162,6 @@ func generateTestMech(genmech string) {
 	mech.HardPoints.Energy = hardPoints["Energy"]
 	mech.HardPoints.Missile = hardPoints["Missile"]
 
-	bList := NewBonuses()
 	var engineMultiplier = 1
 	var engine int
 	var weaponHeat int
@@ -213,10 +214,6 @@ func generateTestMech(genmech string) {
 		}
 	}
 
-	//PrettyPrint(bList.ApplyBonus("dfa", 1))
-	//PrettyPrint(bList.ApplyBonus("melee", 1))
-	//PrettyPrint(bList.ApplyBonus("meleeStab", 1))
-	//PrettyPrint(bList.ApplyBonus("targetHeat", 1))
 	mech.Heat = bList.ApplyBonus("selfHeat", bList.ApplyBonus("weaponHeat", weaponHeat))
 	mech.HeatSink += engineMultiplier * engine
 	mech.Distance.Walk = bList.ApplyBonus("walk", int(movement.CalcWalkDistance()))
@@ -224,7 +221,6 @@ func generateTestMech(genmech string) {
 	mech.Hex.Walk = int(math.Round(float64(mech.Distance.Walk / 30)))
 	mech.Hex.Sprint = int(math.Round(float64(mech.Distance.Sprint / 30)))
 	mech.Distance.Jump = bList.ApplyBonus("jump", mech.JumpJets*30)
-	//	13/6,5 * 0,9 +3
 	mech.JumpHeat = int(math.Round(float64(mech.JumpJets)/heat.JumpHeatUnitSize*heat.JumpHeatPerUnit + float64(heat.JumpHeatMin)))
 	mech.Shutdown = heat.MaxHeat
 	mech.DFADamage = bList.ApplyBonus("dfa", int(chassisdef.DFADamage))
