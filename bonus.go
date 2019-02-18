@@ -87,22 +87,13 @@ func (b Bonuses) ApplyBonus(bonusGroup string, stat int) int {
 		fmt.Printf("%v\n", bonuses[b])
 
 		if bonuses[b].Type == Percentage && bonuses[b].Direction == Add {
-			fmt.Printf("newStat before Percentage Add: %f\n", newStat)
 			newStat += newStat * float64(bonuses[b].Value) / 100
-			fmt.Printf("newStat after Percentage Add: %f\n", newStat)
 		} else if bonuses[b].Type == Percentage && bonuses[b].Direction == Subtract {
-			fmt.Printf("modifier: %f\n", newStat*float64(bonuses[b].Value)/100)
-			fmt.Printf("newStat before Percentage Subtract: %f\n", newStat)
 			newStat -= newStat * float64(bonuses[b].Value) / 100
-			fmt.Printf("newStat after Percentage Subtract: %f\n", newStat)
 		} else if bonuses[b].Type == Number && bonuses[b].Direction == Add {
-			fmt.Printf("newStat before Number Add: %f\n", newStat)
 			newStat += float64(bonuses[b].Value)
-			fmt.Printf("newStat after Number Add: %f\n", newStat)
 		} else if bonuses[b].Type == Number && bonuses[b].Direction == Subtract {
-			fmt.Printf("newStat before Number Subtract: %f\n", newStat)
 			newStat -= float64(bonuses[b].Value)
-			fmt.Printf("newStat after Number Subtract: %f\n", newStat)
 		} else if bonuses[b].Type == Boolean {
 			fmt.Printf("I don't know what to do with Boolean yet: %d\n", bonuses[b].Value)
 			return stat
