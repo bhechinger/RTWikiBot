@@ -3,7 +3,13 @@
     "ArmActuatorSupport": {
       "LeftLimit": "Lower",
       "RightLimit": "Lower"
-    }
+    },
+    "ChassisDefaults" : [{
+      "CategoryID" : "TESTItem",
+      "DefID" : "emod_test_default",
+      "Location" : "LeftTorso",
+      "Type" : "Upgrade"
+    }]
   },
   "FixedEquipment": [
     {

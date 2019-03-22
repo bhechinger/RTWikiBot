@@ -1,45 +1,24 @@
 package defs
 
 type Weapon struct {
-	AOECapable       bool   `json:"AOECapable"`
-	AccuracyModifier int64  `json:"AccuracyModifier"`
-	AllowedLocations string `json:"AllowedLocations"`
-	AmmoCategory     string `json:"AmmoCategory"`
-	AttackRecoil     int64  `json:"AttackRecoil"`
-	BattleValue      int64  `json:"BattleValue"`
-	BonusValueA      string `json:"BonusValueA"`
-	BonusValueB      string `json:"BonusValueB"`
-	Category         string `json:"Category"`
-	ComponentSubType string `json:"ComponentSubType"`
-	ComponentTags    struct {
-		Items            []string `json:"items"`
-		TagSetSourceFile string   `json:"tagSetSourceFile"`
-	} `json:"ComponentTags"`
-	ComponentType            string  `json:"ComponentType"`
-	CriticalChanceMultiplier float64 `json:"CriticalChanceMultiplier"`
-	CriticalComponent        bool    `json:"CriticalComponent"`
-	Custom                   struct {
-		BonusDescriptions struct {
-			Bonuses []string `json:"Bonuses"`
-		} `json:"BonusDescriptions"`
-		InventorySorter struct {
-			SortKey string `json:"SortKey"`
-		} `json:"InventorySorter"`
-	} `json:"Custom"`
-	Damage         int64 `json:"Damage"`
-	DamageVariance int64 `json:"DamageVariance"`
-	Description    struct {
-		Cost         int64  `json:"Cost"`
-		Details      string `json:"Details"`
-		Icon         string `json:"Icon"`
-		ID           string `json:"Id"`
-		Manufacturer string `json:"Manufacturer"`
-		Model        string `json:"Model"`
-		Name         string `json:"Name"`
-		Purchasable  bool   `json:"Purchasable"`
-		Rarity       int64  `json:"Rarity"`
-		UIName       string `json:"UIName"`
-	} `json:"Description"`
+	AOECapable                 bool          `json:"AOECapable"`
+	AccuracyModifier           int64         `json:"AccuracyModifier"`
+	AllowedLocations           string        `json:"AllowedLocations"`
+	AmmoCategory               string        `json:"AmmoCategory"`
+	AttackRecoil               int64         `json:"AttackRecoil"`
+	BattleValue                int64         `json:"BattleValue"`
+	BonusValueA                string        `json:"BonusValueA"`
+	BonusValueB                string        `json:"BonusValueB"`
+	Category                   string        `json:"Category"`
+	ComponentSubType           string        `json:"ComponentSubType"`
+	ComponentTags              Weapon_sub1   `json:"ComponentTags"`
+	ComponentType              string        `json:"ComponentType"`
+	CriticalChanceMultiplier   float64       `json:"CriticalChanceMultiplier"`
+	CriticalComponent          bool          `json:"CriticalComponent"`
+	Custom                     Weapon_sub4   `json:"Custom"`
+	Damage                     int64         `json:"Damage"`
+	DamageVariance             int64         `json:"DamageVariance"`
+	Description                Weapon_sub5   `json:"Description"`
 	DisallowedLocations        string        `json:"DisallowedLocations"`
 	EvasiveDamageMultiplier    float64       `json:"EvasiveDamageMultiplier"`
 	EvasivePipsIgnored         int64         `json:"EvasivePipsIgnored"`
@@ -62,4 +41,35 @@ type Weapon struct {
 	WeaponEffectID             string        `json:"WeaponEffectID"`
 	WeaponSubType              string        `json:"WeaponSubType"`
 	StatusEffects              []interface{} `json:"statusEffects"`
+}
+
+type Weapon_sub4 struct {
+	BonusDescriptions Weapon_sub2 `json:"BonusDescriptions"`
+	InventorySorter   Weapon_sub3 `json:"InventorySorter"`
+}
+
+type Weapon_sub2 struct {
+	Bonuses []string `json:"Bonuses"`
+}
+
+type Weapon_sub5 struct {
+	Cost         int64  `json:"Cost"`
+	Details      string `json:"Details"`
+	Icon         string `json:"Icon"`
+	ID           string `json:"Id"`
+	Manufacturer string `json:"Manufacturer"`
+	Model        string `json:"Model"`
+	Name         string `json:"Name"`
+	Purchasable  bool   `json:"Purchasable"`
+	Rarity       int64  `json:"Rarity"`
+	UIName       string `json:"UIName"`
+}
+
+type Weapon_sub1 struct {
+	Items            []string `json:"items"`
+	TagSetSourceFile string   `json:"tagSetSourceFile"`
+}
+
+type Weapon_sub3 struct {
+	SortKey string `json:"SortKey"`
 }

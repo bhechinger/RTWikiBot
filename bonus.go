@@ -85,51 +85,41 @@ func NewBonuses() Bonuses {
 	return bonuses
 }
 
-func (b Bonuses) ApplyBonus(bonusGroup string, stat int) int {
+func (b Bonuses) ApplyBonus(bonus Bonus, stat int) int {
 	var newStat = float64(stat)
-	bonuses := b.GetBonus(bonusGroup)
 
-	for b := range bonuses {
-		if bonuses[b].Type == Percentage && bonuses[b].Direction == Add {
-			newStat += newStat * float64(bonuses[b].Value) / 100
-		} else if bonuses[b].Type == Percentage && bonuses[b].Direction == Subtract {
-			newStat -= newStat * float64(bonuses[b].Value) / 100
-		} else if bonuses[b].Type == Number && bonuses[b].Direction == Add {
-			newStat += float64(bonuses[b].Value)
-		} else if bonuses[b].Type == Number && bonuses[b].Direction == Subtract {
-			newStat -= float64(bonuses[b].Value)
-		} else if bonuses[b].Type == Boolean {
-			fmt.Printf("I don't know what to do with Boolean yet: %d\n", bonuses[b].Value)
-			return stat
-		} else if bonuses[b].Direction == Base {
-			fmt.Printf("I don't know what to do with Base yet: %d\n", bonuses[b].Value)
-			return stat
-		}
+	if bonus.Type == Percentage && bonus.Direction == Add {
+		newStat += newStat * float64(bonus.Value) / 100
+	} else if bonus.Type == Percentage && bonus.Direction == Subtract {
+		newStat -= newStat * float64(bonus.Value) / 100
+	} else if bonus.Type == Number && bonus.Direction == Add {
+		newStat += float64(bonus.Value)
+	} else if bonus.Type == Number && bonus.Direction == Subtract {
+		newStat -= float64(bonus.Value)
+	} else if bonus.Type == Boolean {
+		fmt.Printf("I don't know what to do with Boolean yet: %d\n", bonus.Value)
+		return stat
+	} else if bonus.Direction == Base {
+		newStat += float64(bonus.Value)
+		return stat
 	}
 
 	return int(math.Round(newStat))
 }
 
-func (b Bonuses) GetBonus(bonusGroup string) []Bonus {
-	var bList []Bonus
-	for bonus := range b.Bonus {
-		if b.affects[bonusGroup].Contains(b.Bonus[bonus].Name) {
-			bList = append(bList, b.Bonus[bonus])
-		}
-	}
-
-	return bList
-}
-
-func (b *Bonuses) AddBonus(bonus string) {
-	newBonus := Bonus{}
+func (b Bonuses) getBonus(bonus string) (bonusType string, newBonus Bonus) {
 	s := strings.Split(bonus, ": ")
 	newBonus.Name = s[0]
 
+	for bt := range b.affects {
+		if b.affects[bt].Contains(newBonus.Name) {
+			bonusType = bt
+		}
+	}
+
 	if len(s) == 1 {
 		newBonus.Type = Boolean
-		b.Bonus = append(b.Bonus, newBonus)
-		return
+		return bonusType, newBonus
 	}
 
 	if strings.Contains(s[1], "%") {
@@ -154,5 +144,6 @@ func (b *Bonuses) AddBonus(bonus string) {
 
 	r := strings.NewReplacer("-", "", "+", "", "%", "")
 	newBonus.Value, _ = strconv.Atoi(r.Replace(s[1]))
-	b.Bonus = append(b.Bonus, newBonus)
+
+	return bonusType, newBonus
 }
