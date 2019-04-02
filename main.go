@@ -118,8 +118,7 @@ func PrettyPrint(v interface{}) (err error) {
 
 func generateTestMech(genmech string) {
 	mech := NewMech(genmech)
-	mech.addDefaults()
-	mech.getBonuses()
 	markdown := mech.generateWikiMarkdown()
 	fmt.Println(markdown)
+	//PrettyPrint(mech)
 }

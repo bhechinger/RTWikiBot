@@ -8,6 +8,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"regexp"
 	"strconv"
 	"strings"
 	"text/template"
@@ -19,7 +20,7 @@ type Mech struct {
 	CCMod      defs.CCMod
 
 	Movement struct {
-		Rating   int64
+		Rating   int
 		Distance struct {
 			Walk   int
 			Sprint int
@@ -161,6 +162,27 @@ func NewMech(genmech string) Mech {
 	mech.HardPoints.Energy = hardPoints["Energy"]
 	mech.HardPoints.Missile = hardPoints["Missile"]
 
+	for i := range mech.MechDef.Inventory {
+		matched, err := regexp.Match(`^emod_engine_\d{3}$`,
+			[]byte(mech.MechDef.Inventory[i].ComponentDefID))
+		if err != nil {
+			log.Fatal(err)
+		}
+		if matched {
+			mech.Movement.Rating, err = strconv.Atoi(
+				EngineDefs[mech.MechDef.Inventory[i].ComponentDefID].Custom.EngineCore.Rating)
+		}
+	}
+
+	mech.Movement.Distance.Walk = mech.CalcWalkDistance()
+	mech.Movement.Distance.Sprint = mech.CalcSprintDistance()
+
+	mech.addDefaults()
+	mech.getBonuses()
+
+	mech.Movement.Hex.Walk = mech.Movement.Distance.Walk / 24
+	mech.Movement.Hex.Sprint = mech.Movement.Distance.Sprint / 24
+
 	return mech
 }
 
@@ -247,27 +269,27 @@ func (m *Mech) addItem(itemId string, item defs.GearDef) {
 }
 
 func (m *Mech) getMovementPoints() float64 {
-	return float64(m.Movement.Rating / m.ChassisDef.Tonnage)
+	return float64(int64(m.Movement.Rating) / m.ChassisDef.Tonnage)
 }
 
 func RoundBy5(value float64) int64 {
 	return int64(value) / 5 * 5
 }
 
-func (m *Mech) CalcWalkDistance() int64 {
+func (m *Mech) CalcWalkDistance() int {
 	// numbers the result of the best fit line for the game movement
 	var walkSpeedFixed = 26.05
 	var walkSpeedMultiplier = 23.14
 
-	return RoundBy5(walkSpeedFixed + m.getMovementPoints()*walkSpeedMultiplier)
+	return int(RoundBy5(walkSpeedFixed + m.getMovementPoints()*walkSpeedMultiplier))
 }
 
-func (m *Mech) CalcSprintDistance() int64 {
+func (m *Mech) CalcSprintDistance() int {
 	// numbers the result of the best fit line for the game movement
 	var runSpeedFixed = 52.43
 	var runSpeedMultiplier = 37.29
 
-	return RoundBy5(runSpeedFixed + m.getMovementPoints()*runSpeedMultiplier)
+	return int(RoundBy5(runSpeedFixed + m.getMovementPoints()*runSpeedMultiplier))
 }
 
 func (m *Mech) getBonuses() {
@@ -276,6 +298,7 @@ func (m *Mech) getBonuses() {
 		comp := GearDefs[m.MechDef.Inventory[i].ComponentDefID]
 		for b := range comp.Custom.BonusDescriptions.Bonuses {
 			bonusType, bonus := bonuses.getBonus(comp.Custom.BonusDescriptions.Bonuses[b])
+			fmt.Printf("bonusType: %v, bonus: %v\n", bonusType, bonus)
 			if bonusType == "run" {
 				m.Movement.Distance.Sprint = bonuses.ApplyBonus(bonus, m.Movement.Distance.Sprint)
 			} else if bonusType == "walk" {
