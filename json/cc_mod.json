@@ -12,9 +12,7 @@
 	"DLLEntryPoint": "CustomComponents.Control.Init",
 	"Settings": {
 		"LogLevel": "Debug",
-		"DebugInfo": [
-			"SalvageProccess"
-		],
+		"DebugInfo": "SalvageProccess",
 		"ColorTags": [],
 		"FixDeletedComponents": true,
 		"FixSaveGameMech": false,

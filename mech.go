@@ -305,7 +305,8 @@ func (m *Mech) getBonuses() {
 		comp := GearDefs[m.MechDef.Inventory[i].ComponentDefID]
 		for b := range comp.Custom.BonusDescriptions.Bonuses {
 			bonusType, bonus := bonuses.getBonus(comp.Custom.BonusDescriptions.Bonuses[b])
-			fmt.Printf("bonusType: %v, bonus: %v\n", bonusType, bonus)
+			fmt.Printf("bonusType: %v, bonus: ", bonusType)
+			PrettyPrint(bonus)
 			if bonusType == "run" {
 				m.Movement.Distance.Sprint = bonuses.ApplyBonus(bonus, m.Movement.Distance.Sprint)
 			} else if bonusType == "walk" {
