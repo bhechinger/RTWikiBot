@@ -163,14 +163,21 @@ func NewMech(genmech string) Mech {
 	mech.HardPoints.Missile = hardPoints["Missile"]
 
 	for i := range mech.MechDef.Inventory {
-		matched, err := regexp.Match(`^emod_engine_\d{3}$`,
-			[]byte(mech.MechDef.Inventory[i].ComponentDefID))
-		if err != nil {
-			log.Fatal(err)
-		}
-		if matched {
-			mech.Movement.Rating, err = strconv.Atoi(
-				EngineDefs[mech.MechDef.Inventory[i].ComponentDefID].Custom.EngineCore.Rating)
+		item := mech.MechDef.Inventory[i]
+		if item.ComponentDefType == "HeatSink" {
+			matched, err := regexp.Match(`^emod_engine_\d{3}$`, []byte(item.ComponentDefID))
+			if err != nil {
+				log.Fatal(err)
+			}
+			if matched {
+				mech.Movement.Rating, err = strconv.Atoi(
+					EngineDefs[item.ComponentDefID].Custom.EngineCore.Rating)
+			}
+		} else if item.ComponentDefType == "JumpJet" {
+			jj := GearDefs[item.ComponentDefID]
+			if jj.Custom.Category == nil {
+				mech.JumpJets += 1
+			}
 		}
 	}
 
