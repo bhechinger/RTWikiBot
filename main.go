@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/gobuffalo/packr"
+	"sync"
 )
 
 // TODO: See why these are wrong
@@ -56,13 +57,18 @@ import (
 // really does 48
 
 func main() {
-	loadChassisDefs()
-	loadMechDefs()
-	loadQuirkDefs()
-	loadWeaponDefs()
-	loadAmmoDefs()
-	loadEngineDefs()
-	loadGearDefs()
+	var wg sync.WaitGroup
+
+	wg.Add(7)
+	go loadChassisDefs(&wg)
+	go loadMechDefs(&wg)
+	go loadQuirkDefs(&wg)
+	go loadWeaponDefs(&wg)
+	go loadAmmoDefs(&wg)
+	go loadEngineDefs(&wg)
+	go loadGearDefs(&wg)
+
+	wg.Wait()
 
 	//generateTestMech("mechdef_phoenixhawk_PXH-IIC")
 	//generateTestMech("mechdef_catapult_CPLT-P")

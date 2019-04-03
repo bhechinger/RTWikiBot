@@ -9,6 +9,7 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
+	"sync"
 )
 
 func getDefFiles(defType string, quirk bool) []string {
@@ -39,7 +40,8 @@ func getDefFiles(defType string, quirk bool) []string {
 	return files
 }
 
-func loadSettings() defs.Settings {
+func loadSettings(wg *sync.WaitGroup) defs.Settings {
+	defer wg.Done()
 	fp, err := os.Open("../RTWikiBot/json/Settings.json")
 	if err != nil {
 		panic(err)
@@ -56,9 +58,10 @@ func loadSettings() defs.Settings {
 	return def
 }
 
-func loadBuildingDefs() {
+func loadBuildingDefs(wg *sync.WaitGroup) {
+	defer wg.Done()
 	files := getDefFiles("buildingdef", false)
-	fmt.Printf("Found '%d' BuildingDef files... ", len(files))
+	fmt.Printf("Found '%d' BuildingDef files\n", len(files))
 	for f := range files {
 		fp, err := os.Open(files[f])
 		if err != nil {
@@ -77,9 +80,10 @@ func loadBuildingDefs() {
 	fmt.Printf("Loaded BuildingDefs: %d\n", len(BuildingDefs))
 }
 
-func loadChassisDefs() {
+func loadChassisDefs(wg *sync.WaitGroup) {
+	defer wg.Done()
 	files := getDefFiles("chassisdef", false)
-	fmt.Printf("Found '%d' ChassisDef files... ", len(files))
+	fmt.Printf("Found '%d' ChassisDef files\n", len(files))
 	for f := range files {
 		fp, err := os.Open(files[f])
 		if err != nil {
@@ -98,9 +102,10 @@ func loadChassisDefs() {
 	fmt.Printf("Loaded ChassisDefs: %d\n", len(ChassisDefs))
 }
 
-func loadHardPointDataDefs() {
+func loadHardPointDataDefs(wg *sync.WaitGroup) {
+	defer wg.Done()
 	files := getDefFiles("hardpointdatadef", false)
-	fmt.Printf("Found '%d' HardPointDataDef files... ", len(files))
+	fmt.Printf("Found '%d' HardPointDataDef files\n", len(files))
 	for f := range files {
 		fp, err := os.Open(files[f])
 		if err != nil {
@@ -119,9 +124,10 @@ func loadHardPointDataDefs() {
 	fmt.Printf("Loaded HardPointDataDefs: %d\n", len(HardPointDataDefs))
 }
 
-func loadHeraldryDefs() {
+func loadHeraldryDefs(wg *sync.WaitGroup) {
+	defer wg.Done()
 	files := getDefFiles("heraldrydef", false)
-	fmt.Printf("Found '%d' HeraldryDef files... ", len(files))
+	fmt.Printf("Found '%d' HeraldryDef files\n", len(files))
 	for f := range files {
 		fp, err := os.Open(files[f])
 		if err != nil {
@@ -140,9 +146,10 @@ func loadHeraldryDefs() {
 	fmt.Printf("Loaded HeraldryDefs: %d\n", len(HeraldryDefs))
 }
 
-func loadLanceDefs() {
+func loadLanceDefs(wg *sync.WaitGroup) {
+	defer wg.Done()
 	files := getDefFiles("lancedef", false)
-	fmt.Printf("Found '%d' LanceDef files... ", len(files))
+	fmt.Printf("Found '%d' LanceDef files\n", len(files))
 	for f := range files {
 		fp, err := os.Open(files[f])
 		if err != nil {
@@ -161,9 +168,10 @@ func loadLanceDefs() {
 	fmt.Printf("Loaded LanceDefs: %d\n", len(LanceDefs))
 }
 
-func loadMechDefs() {
+func loadMechDefs(wg *sync.WaitGroup) {
+	defer wg.Done()
 	files := getDefFiles("mechdef", false)
-	fmt.Printf("Found '%d' MechDef files... ", len(files))
+	fmt.Printf("Found '%d' MechDef files\n", len(files))
 	for f := range files {
 		fp, err := os.Open(files[f])
 		if err != nil {
@@ -182,9 +190,10 @@ func loadMechDefs() {
 	fmt.Printf("Loaded MechDefs: %d\n", len(MechDefs))
 }
 
-func loadMoveDefs() {
+func loadMoveDefs(wg *sync.WaitGroup) {
+	defer wg.Done()
 	files := getDefFiles("movedef", false)
-	fmt.Printf("Found '%d' MoveDef files... ", len(files))
+	fmt.Printf("Found '%d' MoveDef files\n", len(files))
 	for f := range files {
 		fp, err := os.Open(files[f])
 		if err != nil {
@@ -203,9 +212,10 @@ func loadMoveDefs() {
 	fmt.Printf("Loaded MoveDefs: %d\n", len(MoveDefs))
 }
 
-func loadPathingDefs() {
+func loadPathingDefs(wg *sync.WaitGroup) {
+	defer wg.Done()
 	files := getDefFiles("pathingdef", false)
-	fmt.Printf("Found '%d' PathingDef files... ", len(files))
+	fmt.Printf("Found '%d' PathingDef files\n", len(files))
 	for f := range files {
 		fp, err := os.Open(files[f])
 		if err != nil {
@@ -224,9 +234,10 @@ func loadPathingDefs() {
 	fmt.Printf("Loaded PathingDefs: %d\n", len(PathingDefs))
 }
 
-func loadQuirkDefs() {
+func loadQuirkDefs(wg *sync.WaitGroup) {
+	defer wg.Done()
 	files := getDefFiles("quirks", true)
-	fmt.Printf("Found '%d' Quirk files... ", len(files))
+	fmt.Printf("Found '%d' Quirk files\n", len(files))
 	for f := range files {
 		fp, err := os.Open(files[f])
 		if err != nil {
@@ -245,9 +256,10 @@ func loadQuirkDefs() {
 	fmt.Printf("Loaded Quirks: %d\n", len(Quirks))
 }
 
-func loadShopDefs() {
+func loadShopDefs(wg *sync.WaitGroup) {
+	defer wg.Done()
 	files := getDefFiles("shopdef", false)
-	fmt.Printf("Found '%d' ShopDef files... ", len(files))
+	fmt.Printf("Found '%d' ShopDef files\n", len(files))
 	for f := range files {
 		fp, err := os.Open(files[f])
 		if err != nil {
@@ -266,9 +278,10 @@ func loadShopDefs() {
 	fmt.Printf("Loaded ShopDefs: %d\n", len(ShopDefs))
 }
 
-func loadStarSystemDefs() {
+func loadStarSystemDefs(wg *sync.WaitGroup) {
+	defer wg.Done()
 	files := getDefFiles("starsystemdef", false)
-	fmt.Printf("Found '%d' StarSystemDef files... ", len(files))
+	fmt.Printf("Found '%d' StarSystemDef files\n", len(files))
 	for f := range files {
 		fp, err := os.Open(files[f])
 		if err != nil {
@@ -287,9 +300,10 @@ func loadStarSystemDefs() {
 	fmt.Printf("Loaded StarSystemDefs: %d\n", len(StarSystemDefs))
 }
 
-func loadTurretChassisDefs() {
+func loadTurretChassisDefs(wg *sync.WaitGroup) {
+	defer wg.Done()
 	files := getDefFiles("turretchassisdef", false)
-	fmt.Printf("Found '%d' TurretChassisDefs files... ", len(files))
+	fmt.Printf("Found '%d' TurretChassisDefs files\n", len(files))
 	for f := range files {
 		fp, err := os.Open(files[f])
 		if err != nil {
@@ -308,9 +322,10 @@ func loadTurretChassisDefs() {
 	fmt.Printf("Loaded TurretChassisDefs: %d\n", len(TurretChassisDefs))
 }
 
-func loadTurretDefs() {
+func loadTurretDefs(wg *sync.WaitGroup) {
+	defer wg.Done()
 	files := getDefFiles("turretdef", false)
-	fmt.Printf("Found '%d' TurretDef files... ", len(files))
+	fmt.Printf("Found '%d' TurretDef files\n", len(files))
 	for f := range files {
 		fp, err := os.Open(files[f])
 		if err != nil {
@@ -329,9 +344,10 @@ func loadTurretDefs() {
 	fmt.Printf("Loaded TurretDefs: %d\n", len(TurretDefs))
 }
 
-func loadVehicleChassisDefs() {
+func loadVehicleChassisDefs(wg *sync.WaitGroup) {
+	defer wg.Done()
 	files := getDefFiles("vehiclechassisdef", false)
-	fmt.Printf("Found '%d' VehicleChassisDef files... ", len(files))
+	fmt.Printf("Found '%d' VehicleChassisDef files\n", len(files))
 	for f := range files {
 		fp, err := os.Open(files[f])
 		if err != nil {
@@ -350,9 +366,10 @@ func loadVehicleChassisDefs() {
 	fmt.Printf("Loaded VehicleChassisDefs: %d\n", len(VehicleChassisDefs))
 }
 
-func loadVehicleDefs() {
+func loadVehicleDefs(wg *sync.WaitGroup) {
+	defer wg.Done()
 	files := getDefFiles("vehicledef", false)
-	fmt.Printf("Found '%d' VehicleDef files... ", len(files))
+	fmt.Printf("Found '%d' VehicleDef files\n", len(files))
 	for f := range files {
 		fp, err := os.Open(files[f])
 		if err != nil {
@@ -371,9 +388,10 @@ func loadVehicleDefs() {
 	fmt.Printf("Loaded VehicleDefs: %d\n", len(VehicleDefs))
 }
 
-func loadWeaponDefs() {
+func loadWeaponDefs(wg *sync.WaitGroup) {
+	defer wg.Done()
 	files := getDefFiles("Weapon_", false)
-	fmt.Printf("Found '%d' Weapon files... ", len(files))
+	fmt.Printf("Found '%d' Weapon files\n", len(files))
 	for f := range files {
 		fp, err := os.Open(files[f])
 		if err != nil {
@@ -392,9 +410,10 @@ func loadWeaponDefs() {
 	fmt.Printf("Loaded Weapons: %d\n", len(Weapons))
 }
 
-func loadAmmoDefs() {
+func loadAmmoDefs(wg *sync.WaitGroup) {
+	defer wg.Done()
 	files := getDefFiles("Ammo_", false)
-	fmt.Printf("Found '%d' Ammo files... ", len(files))
+	fmt.Printf("Found '%d' Ammo files\n", len(files))
 	for f := range files {
 		fp, err := os.Open(files[f])
 		if err != nil {
@@ -413,9 +432,10 @@ func loadAmmoDefs() {
 	fmt.Printf("Loaded Ammo: %d\n", len(AmmoDefs))
 }
 
-func loadEngineDefs() {
+func loadEngineDefs(wg *sync.WaitGroup) {
+	defer wg.Done()
 	files := getDefFiles("emod", false)
-	fmt.Printf("Found '%d' Engine files... ", len(files))
+	fmt.Printf("Found '%d' Engine files\n", len(files))
 	for f := range files {
 		fp, err := os.Open(files[f])
 		if err != nil {
@@ -434,9 +454,10 @@ func loadEngineDefs() {
 	fmt.Printf("Loaded Engines: %d\n", len(EngineDefs))
 }
 
-func loadGearDefs() {
+func loadGearDefs(wg *sync.WaitGroup) {
+	defer wg.Done()
 	files := getDefFiles("Gear_", false)
-	fmt.Printf("Found '%d' Gear files... ", len(files))
+	fmt.Printf("Found '%d' Gear files\n", len(files))
 	for f := range files {
 		fp, err := os.Open(files[f])
 		if err != nil {

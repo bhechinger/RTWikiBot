@@ -14,6 +14,8 @@ import (
 	"text/template"
 )
 
+var hexSize = 24
+
 type Mech struct {
 	ChassisDef defs.ChassisDef
 	MechDef    defs.MechDef
@@ -183,12 +185,13 @@ func NewMech(genmech string) Mech {
 
 	mech.Movement.Distance.Walk = mech.CalcWalkDistance()
 	mech.Movement.Distance.Sprint = mech.CalcSprintDistance()
+	mech.Movement.Distance.Jump = mech.JumpJets * hexSize
 
 	mech.addDefaults()
 	mech.getBonuses()
 
-	mech.Movement.Hex.Walk = mech.Movement.Distance.Walk / 24
-	mech.Movement.Hex.Sprint = mech.Movement.Distance.Sprint / 24
+	mech.Movement.Hex.Walk = mech.Movement.Distance.Walk / hexSize
+	mech.Movement.Hex.Sprint = mech.Movement.Distance.Sprint / hexSize
 
 	return mech
 }
