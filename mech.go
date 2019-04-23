@@ -7,6 +7,7 @@ import (
 	"go.4amlunch.net/RTWikiBot/defs"
 	"io/ioutil"
 	"log"
+	"math"
 	"os"
 	"regexp"
 	"strconv"
@@ -20,6 +21,7 @@ type Mech struct {
 	ChassisDef defs.ChassisDef
 	MechDef    defs.MechDef
 	CCMod      defs.CCMod
+	Constants  defs.GameConstants
 
 	Movement struct {
 		Rating   int
@@ -35,9 +37,17 @@ type Mech struct {
 		}
 	}
 
+	Heat struct {
+		Self     int
+		Sink     int
+		Jump     int
+		Shutdown int
+	}
+
 	QuirkText     string
 	HardPoints    HardPoints
 	Damage        int
+	HeatDmg       int
 	DFADamage     int
 	DFASelfDamage int
 	Melee         struct {
@@ -46,14 +56,9 @@ type Mech struct {
 		Stability int
 	}
 	Stability  int
-	Heat       int
-	HeatDmg    int
 	Structure  int
 	Armor      int
-	HeatSink   int
 	JumpJets   int
-	JumpHeat   int
-	Shutdown   int
 	CAPName    string
 	StockRoles string
 	AmmoType   []string
@@ -84,9 +89,35 @@ func loadCCMod() defs.CCMod {
 	return def
 }
 
+func loadConstants() defs.GameConstants {
+	file := "RogueTech Core/StreamingAssets/data/constants/CombatGameConstants.json"
+
+	fp, err := os.Open(file)
+	if err != nil {
+		panic(err)
+	}
+
+	fileByte, _ := ioutil.ReadAll(fp)
+	def := defs.GameConstants{}
+
+	err = json.Unmarshal(bytes.Trim(fileByte, "\xef\xbb\xbf"), &def)
+	if err != nil {
+		fmt.Println(file)
+		fmt.Println(err)
+	}
+
+	err = fp.Close()
+	if err != nil {
+		panic(err)
+	}
+
+	return def
+}
+
 func NewMech(genmech string) Mech {
 	mech := Mech{}
 	mech.CCMod = loadCCMod()
+	mech.Constants = loadConstants()
 	mech.MechDef = MechDefs[genmech]
 	mech.ChassisDef = ChassisDefs[mech.MechDef.ChassisID]
 	mech.CAPName = strings.ToUpper(mech.ChassisDef.PrefabBase)
@@ -164,35 +195,106 @@ func NewMech(genmech string) Mech {
 	mech.HardPoints.Energy = hardPoints["Energy"]
 	mech.HardPoints.Missile = hardPoints["Missile"]
 
+	mech.addDefaults()
+
+	heatSinkKitIDs := map[string]bool{
+		"emod_kit_shs":            true,
+		"emod_kit_cdhs":           true,
+		"emod_kit_dhs_proto":      true,
+		"emod_kit_chs":            true,
+		"emod_kit_dhs":            true,
+		"emod_kit_dhs_widowmaker": true,
+		"emod_kit_dhs_royal":      true,
+	}
+
+	var (
+		hsValue      int
+		coolingValue int
+	)
 	for i := range mech.MechDef.Inventory {
 		item := mech.MechDef.Inventory[i]
+
 		if item.ComponentDefType == "HeatSink" {
-			matched, err := regexp.Match(`^emod_engine_\d{3}$`, []byte(item.ComponentDefID))
+			engineSlotsMatched, err := regexp.Match(`^emod_engineslots.*$`, []byte(item.ComponentDefID))
 			if err != nil {
 				log.Fatal(err)
 			}
-			if matched {
+
+			engineMatched, err := regexp.Match(`^emod_engine_\d{3}$`, []byte(item.ComponentDefID))
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			coolingMatched, err := regexp.Match(`^emod_engine_cooling_\d{1,2}$`, []byte(item.ComponentDefID))
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			if engineSlotsMatched {
+				continue
+			} else if engineMatched {
 				mech.Movement.Rating, err = strconv.Atoi(
 					EngineDefs[item.ComponentDefID].Custom.EngineCore.Rating)
+				if err != nil {
+					log.Fatal(err)
+				}
+			} else if coolingMatched {
+				coolingValue = int(EngineDefs[item.ComponentDefID].Custom.EngineHeatBlock.HeatSinkCount)
+			} else if heatSinkKitIDs[item.ComponentDefID] {
+				hs := GearDefs[EngineDefs[item.ComponentDefID].Custom.Cooling.HeatSinkDefID].Custom.BonusDescriptions.Bonuses
+				for bonus := range hs {
+					hptMatched, err := regexp.Match(`^HeatPerTurn: .*$`, []byte(hs[bonus]))
+					if err != nil {
+						log.Fatal(err)
+					}
+					if hptMatched {
+						s := strings.Split(hs[bonus], ": -")
+						fmt.Printf("HPT Matched: %v\n", s[1])
+						hsValue, err = strconv.Atoi(s[1])
+						if err != nil {
+							log.Fatal(err)
+						}
+						mech.Heat.Sink += hsValue * 10
+					}
+				}
+			} else {
+				fmt.Printf("Not Engine: ")
+				PrettyPrint(item)
+				PrettyPrint(EngineDefs[item.ComponentDefID])
 			}
 		} else if item.ComponentDefType == "JumpJet" {
 			jj := GearDefs[item.ComponentDefID]
 			if jj.Custom.Category == nil {
 				mech.JumpJets += 1
 			}
+		} else if item.ComponentDefType == "Weapon" {
+			//fmt.Printf("Weapon: ")
+			weapon := Weapons[item.ComponentDefID]
+			//PrettyPrint(weapon)
+			mech.Damage += int(weapon.Damage * weapon.ShotsWhenFired)
+			mech.HeatDmg += int(weapon.HeatDamage)
+			mech.Heat.Self += int(weapon.HeatGenerated)
+			mech.Stability += int(weapon.Instability)
 		}
 	}
+	mech.Heat.Sink += hsValue * coolingValue
+	// TODO: Verify this is true
+	mech.Heat.Jump = int(math.Round(float64(mech.JumpJets) * mech.Constants.Heat.JumpHeatPerUnit * float64(mech.Movement.Hex.Jump)))
+	if mech.Heat.Jump < 3 {
+		mech.Heat.Jump = 3
+	}
+	mech.Heat.Shutdown = int(mech.Constants.Heat.MaxHeat)
 
 	mech.Movement.Distance.Walk = mech.CalcWalkDistance()
 	mech.Movement.Distance.Sprint = mech.CalcSprintDistance()
 	mech.Movement.Distance.Jump = mech.JumpJets * hexSize
 
-	mech.addDefaults()
-	mech.getBonuses()
-
 	mech.Movement.Hex.Walk = mech.Movement.Distance.Walk / hexSize
 	mech.Movement.Hex.Sprint = mech.Movement.Distance.Sprint / hexSize
 
+	mech.getBonuses()
+
+	mech.Melee.Total = int(mech.ChassisDef.MeleeDamage) + mech.Melee.Bonus
 	return mech
 }
 
@@ -279,6 +381,7 @@ func (m *Mech) addItem(itemId string, item defs.GearDef) {
 }
 
 func (m *Mech) getMovementPoints() float64 {
+	//fmt.Printf("getting MP: %v %v\n", m.Movement.Rating, m.ChassisDef.Tonnage)
 	return float64(int64(m.Movement.Rating) / m.ChassisDef.Tonnage)
 }
 
@@ -308,8 +411,8 @@ func (m *Mech) getBonuses() {
 		comp := GearDefs[m.MechDef.Inventory[i].ComponentDefID]
 		for b := range comp.Custom.BonusDescriptions.Bonuses {
 			bonusType, bonus := bonuses.getBonus(comp.Custom.BonusDescriptions.Bonuses[b])
-			fmt.Printf("bonusType: %v, bonus: ", bonusType)
-			PrettyPrint(bonus)
+			//fmt.Printf("bonusType: %v, bonus: ", bonusType)
+			//PrettyPrint(bonus)
 			if bonusType == "run" {
 				m.Movement.Distance.Sprint = bonuses.ApplyBonus(bonus, m.Movement.Distance.Sprint)
 			} else if bonusType == "walk" {
@@ -331,9 +434,9 @@ func (m *Mech) getBonuses() {
 			} else if bonusType == "targetStab" {
 				m.Stability = bonuses.ApplyBonus(bonus, m.Stability)
 			} else if bonusType == "selfHeat" {
-				m.Heat = bonuses.ApplyBonus(bonus, m.Heat)
+				m.Heat.Self = bonuses.ApplyBonus(bonus, m.Heat.Self)
 			} else if bonusType == "weaponHeat" {
-				m.Heat = bonuses.ApplyBonus(bonus, m.Heat)
+				m.Heat.Self = bonuses.ApplyBonus(bonus, m.Heat.Self)
 			}
 		}
 	}

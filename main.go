@@ -59,6 +59,7 @@ import (
 func main() {
 	var wg sync.WaitGroup
 
+	// Load all the definition data
 	wg.Add(7)
 	go loadChassisDefs(&wg)
 	go loadMechDefs(&wg)
@@ -67,12 +68,11 @@ func main() {
 	go loadAmmoDefs(&wg)
 	go loadEngineDefs(&wg)
 	go loadGearDefs(&wg)
-
 	wg.Wait()
 
 	//generateTestMech("mechdef_phoenixhawk_PXH-IIC")
 	//generateTestMech("mechdef_catapult_CPLT-P")
-	//generateTestMech("mechdef_hatchetman_HCT-S7")
+	generateTestMech("mechdef_hatchetman_HCT-S7")
 	//generateTestMech("mechdef_locust_LCT-2V")
 	//generateTestMech("mechdef_hellspawn_HSN-8E")
 	//generateTestMech("mechdef_osiris_OSR-3D")
@@ -81,7 +81,7 @@ func main() {
 	//generateTestMech("mechdef_hunchback_HBK-4N")
 	//generateTestMech("mechdef_javelin_JVN-10P")
 	//generateTestMech("mechdef_centurion_CN9-YLW")
-	generateTestMech("mechdef_GyrFalcon_1")
+	//generateTestMech("mechdef_GyrFalcon_1")
 }
 
 type HardPoints struct {

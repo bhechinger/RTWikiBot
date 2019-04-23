@@ -40,10 +40,10 @@ func NewBonuses() Bonuses {
 	bonuses.affects = make(map[string]*StringSet)
 
 	bonuses.affects["run"] = NewStringSet()
-	bonuses.affects["run"].Add("RunSpeed")
+	bonuses.affects["run"].Add("ActivatedRunSpeed")
 
 	bonuses.affects["walk"] = NewStringSet()
-	bonuses.affects["walk"].Add("WalkSpeed")
+	bonuses.affects["walk"].Add("ActiveWalkSpeed")
 
 	bonuses.affects["jump"] = NewStringSet()
 	bonuses.affects["jump"].Add("JumpDistance")
@@ -77,7 +77,8 @@ func NewBonuses() Bonuses {
 
 	bonuses.affects["selfHeat"] = NewStringSet()
 	bonuses.affects["selfHeat"].Add("HeatGenerated")
-	bonuses.affects["selfHeat"].Add("HeatPerTurn")
+	bonuses.affects["selfHeat"].Add("ActiveHeatPerTurn")
+	bonuses.affects["selfHeat"].Add("AMSHeat")
 
 	bonuses.affects["weaponHeat"] = NewStringSet()
 	bonuses.affects["weaponHeat"].Add("TEHeatgen")

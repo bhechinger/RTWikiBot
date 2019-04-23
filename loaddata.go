@@ -42,7 +42,7 @@ func getDefFiles(defType string, quirk bool) []string {
 
 func loadSettings(wg *sync.WaitGroup) defs.Settings {
 	defer wg.Done()
-	fp, err := os.Open("../RTWikiBot/json/Settings.json")
+	fp, err := os.Open("MechEngineer/Settings.json")
 	if err != nil {
 		panic(err)
 	}

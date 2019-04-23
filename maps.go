@@ -61,3 +61,4 @@ var AmmoDefs = map[string]defs.AmmoDef{}
 
 //go:generate gojson -name Settings -pkg defs -input json/Settings.json -o defs/settings.go -subStruct
 //go:generate gojson -name CCMod -pkg defs -input json/cc_mod.json -o defs/ccmod.go -subStruct
+//go:generate gojson -name GameConstants -pkg defs -input json/CombatGameConstants.json -o defs/GameConstants.go -subStruct
