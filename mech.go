@@ -225,12 +225,36 @@ func NewMech(genmech string) Mech {
 				log.Fatal(err)
 			}
 
-			coolingMatched, err := regexp.Match(`^emod_engine_cooling_\d{1,2}$`, []byte(item.ComponentDefID))
+			coolingMatched, err := regexp.Match(`^emod_engine_cooling.*$`, []byte(item.ComponentDefID))
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			heatSinkMatched, err := regexp.Match(`^Gear_HeatSink_.*$`, []byte(item.ComponentDefID))
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			emergencyCoolantMatched, err := regexp.Match(`^Gear_EmergencyCoolant.*$`, []byte(item.ComponentDefID))
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			coolantPodMatched, err := regexp.Match(`^Gear_Coolantpod_Clan.*$`, []byte(item.ComponentDefID))
 			if err != nil {
 				log.Fatal(err)
 			}
 
 			if engineSlotsMatched {
+				continue
+			} else if emergencyCoolantMatched {
+				// TODO: Skip for now. Need to figure this out.
+				continue
+			} else if coolantPodMatched {
+				// TODO: Skip for now. Need to figure this out.
+				continue
+			} else if item.ComponentDefID == "Gear_Engine_Pirate" {
+				// TODO: Skip for now. Need to figure this out.
 				continue
 			} else if engineMatched {
 				mech.Movement.Rating, err = strconv.Atoi(
@@ -241,6 +265,7 @@ func NewMech(genmech string) Mech {
 			} else if coolingMatched {
 				coolingValue = int(EngineDefs[item.ComponentDefID].Custom.EngineHeatBlock.HeatSinkCount)
 			} else if heatSinkKitIDs[item.ComponentDefID] {
+				// DRY
 				hs := GearDefs[EngineDefs[item.ComponentDefID].Custom.Cooling.HeatSinkDefID].Custom.BonusDescriptions.Bonuses
 				for bonus := range hs {
 					hptMatched, err := regexp.Match(`^HeatPerTurn: .*$`, []byte(hs[bonus]))
@@ -249,12 +274,28 @@ func NewMech(genmech string) Mech {
 					}
 					if hptMatched {
 						s := strings.Split(hs[bonus], ": -")
-						fmt.Printf("HPT Matched: %v\n", s[1])
 						hsValue, err = strconv.Atoi(s[1])
 						if err != nil {
 							log.Fatal(err)
 						}
 						mech.Heat.Sink += hsValue * 10
+					}
+				}
+			} else if heatSinkMatched {
+				// DRY
+				hs := GearDefs[EngineDefs[item.ComponentDefID].Custom.Cooling.HeatSinkDefID].Custom.BonusDescriptions.Bonuses
+				for bonus := range hs {
+					hptMatched, err := regexp.Match(`^HeatPerTurn: .*$`, []byte(hs[bonus]))
+					if err != nil {
+						log.Fatal(err)
+					}
+					if hptMatched {
+						s := strings.Split(hs[bonus], ": -")
+						hsValue, err = strconv.Atoi(s[1])
+						if err != nil {
+							log.Fatal(err)
+						}
+						mech.Heat.Sink += hsValue
 					}
 				}
 			} else {
