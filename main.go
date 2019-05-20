@@ -1,6 +1,7 @@
 package main
 
 import (
+	"cgt.name/pkg/go-mwclient"
 	"encoding/json"
 	"fmt"
 	"github.com/gobuffalo/packr"
@@ -82,6 +83,41 @@ func main() {
 	generateTestMech("mechdef_javelin_JVN-10P")
 	generateTestMech("mechdef_centurion_CN9-YLW")
 	generateTestMech("mechdef_GyrFalcon_1")
+
+	w, err := mwclient.New("https://rt.4amlunch.net/api.php", "myWikibot")
+	if err != nil {
+		panic(err)
+	}
+
+	// Log in.
+	err = w.Login("Wonko@SkyNet", "kr35kvn8r7rra19r3c8td37c0ipm8pde")
+	if err != nil {
+		panic(err)
+	}
+
+	token, err := w.GetToken(mwclient.CSRFToken)
+	if err != nil {
+		panic(err)
+	}
+
+	// Specify parameters to send.
+	parameters := map[string]string{
+		"action": "edit",
+		"format": "json",
+		"title":  "This is a test 1",
+		"text":   "This is some text.",
+		"token":  token,
+		"bot":    "true",
+	}
+
+	// Make the request.
+	resp, err := w.Post(parameters)
+	if err != nil {
+		panic(err)
+	}
+
+	// Print the *jason.Object
+	fmt.Println(resp)
 }
 
 type HardPoints struct {

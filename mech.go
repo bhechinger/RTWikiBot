@@ -326,6 +326,9 @@ func NewMech(genmech string) Mech {
 	}
 	mech.Heat.Shutdown = int(mech.Constants.Heat.MaxHeat)
 
+	mech.DFADamage = int(mech.ChassisDef.DFADamage)
+	mech.DFASelfDamage = int(mech.ChassisDef.DFASelfDamage)
+
 	mech.Movement.Distance.Walk = mech.CalcWalkDistance()
 	mech.Movement.Distance.Sprint = mech.CalcSprintDistance()
 	mech.Movement.Distance.Jump = mech.JumpJets * hexSize
