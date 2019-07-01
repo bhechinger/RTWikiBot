@@ -100,6 +100,10 @@ func loadConstants() defs.GameConstants {
 	fileByte, _ := ioutil.ReadAll(fp)
 	def := defs.GameConstants{}
 
+	// strip comments
+	ccmt := regexp.MustCompile(`/\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*+/`)
+	fileByte = ccmt.ReplaceAll(fileByte, []byte(""))
+
 	err = json.Unmarshal(bytes.Trim(fileByte, "\xef\xbb\xbf"), &def)
 	if err != nil {
 		fmt.Println(file)

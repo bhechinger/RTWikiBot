@@ -1,7 +1,6 @@
 package main
 
 import (
-	"cgt.name/pkg/go-mwclient"
 	"encoding/json"
 	"fmt"
 	"github.com/gobuffalo/packr"
@@ -71,53 +70,27 @@ func main() {
 	go loadGearDefs(&wg)
 	wg.Wait()
 
-	generateTestMech("mechdef_phoenixhawk_PXH-IIC")
-	generateTestMech("mechdef_catapult_CPLT-P")
-	generateTestMech("mechdef_hatchetman_HCT-S7")
-	generateTestMech("mechdef_locust_LCT-2V")
-	generateTestMech("mechdef_hellspawn_HSN-8E")
-	generateTestMech("mechdef_osiris_OSR-3D")
-	generateTestMech("mechdef_raven_RVN-3L")
-	generateTestMech("mechdef_vindicator_VND-1R")
-	generateTestMech("mechdef_hunchback_HBK-4N")
-	generateTestMech("mechdef_javelin_JVN-10P")
-	generateTestMech("mechdef_centurion_CN9-YLW")
-	generateTestMech("mechdef_GyrFalcon_1")
+	mw := MediaWiki{}
+	mw.Init(
+		"https://rt.4amlunch.net/api.php",
+		"myWikibot",
+		"Wonko@SkyNet",
+		"kr35kvn8r7rra19r3c8td37c0ipm8pde",
+	)
 
-	w, err := mwclient.New("https://rt.4amlunch.net/api.php", "myWikibot")
-	if err != nil {
-		panic(err)
-	}
-
-	// Log in.
-	err = w.Login("Wonko@SkyNet", "kr35kvn8r7rra19r3c8td37c0ipm8pde")
-	if err != nil {
-		panic(err)
-	}
-
-	token, err := w.GetToken(mwclient.CSRFToken)
-	if err != nil {
-		panic(err)
-	}
-
-	// Specify parameters to send.
-	parameters := map[string]string{
-		"action": "edit",
-		"format": "json",
-		"title":  "This is a test 1",
-		"text":   "This is some text.",
-		"token":  token,
-		"bot":    "true",
-	}
-
-	// Make the request.
-	resp, err := w.Post(parameters)
-	if err != nil {
-		panic(err)
-	}
-
-	// Print the *jason.Object
-	fmt.Println(resp)
+	markdown, name := generateTestMech("mechdef_phoenixhawk_PXH-IIC")
+	mw.WritePage(name, markdown)
+	//generateTestMech("mechdef_catapult_CPLT-P")
+	//generateTestMech("mechdef_hatchetman_HCT-S7")
+	//generateTestMech("mechdef_locust_LCT-2V")
+	//generateTestMech("mechdef_hellspawn_HSN-8E")
+	//generateTestMech("mechdef_osiris_OSR-3D")
+	//generateTestMech("mechdef_raven_RVN-3L")
+	//generateTestMech("mechdef_vindicator_VND-1R")
+	//generateTestMech("mechdef_hunchback_HBK-4N")
+	//generateTestMech("mechdef_javelin_JVN-10P")
+	//generateTestMech("mechdef_centurion_CN9-YLW")
+	//generateTestMech("mechdef_GyrFalcon_1")
 }
 
 type HardPoints struct {
@@ -158,9 +131,9 @@ func PrettyPrint(v interface{}) (err error) {
 	return
 }
 
-func generateTestMech(genmech string) {
+func generateTestMech(genmech string) (markdown string, name string) {
 	mech := NewMech(genmech)
-	markdown := mech.generateWikiMarkdown()
-	fmt.Println(markdown)
-	//PrettyPrint(mech)
+	markdown = mech.generateWikiMarkdown()
+	//fmt.Println(markdown)
+	return markdown, mech.ChassisDef.VariantName
 }

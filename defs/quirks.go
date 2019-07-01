@@ -97,16 +97,16 @@ type Quirk_sub8 struct {
 }
 
 type Quirk_sub11 struct {
-	EffectTargetType        string `json:"effectTargetType"`
-	EffectTriggerType       string `json:"effectTriggerType"`
-	ExtendDurationOnTrigger int64  `json:"extendDurationOnTrigger"`
-	ForcePathRebuild        bool   `json:"forcePathRebuild"`
-	ForceVisRebuild         bool   `json:"forceVisRebuild"`
-	Range                   int64  `json:"range"`
-	ShowInStatusPanel       bool   `json:"showInStatusPanel"`
-	ShowInTargetPreview     bool   `json:"showInTargetPreview"`
-	SpecialRules            string `json:"specialRules"`
-	TriggerLimit            int64  `json:"triggerLimit"`
+	EffectTargetType        string  `json:"effectTargetType"`
+	EffectTriggerType       string  `json:"effectTriggerType"`
+	ExtendDurationOnTrigger int64   `json:"extendDurationOnTrigger"`
+	ForcePathRebuild        bool    `json:"forcePathRebuild"`
+	ForceVisRebuild         bool    `json:"forceVisRebuild"`
+	Range                   float64 `json:"range"`
+	ShowInStatusPanel       bool    `json:"showInStatusPanel"`
+	ShowInTargetPreview     bool    `json:"showInTargetPreview"`
+	SpecialRules            string  `json:"specialRules"`
+	TriggerLimit            int64   `json:"triggerLimit"`
 }
 
 type Quirk_sub4 struct {

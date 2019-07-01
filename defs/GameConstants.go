@@ -244,13 +244,13 @@ type GameConstants_sub6 struct {
 	ArmorMultiplierHeavy       int64   `json:"ArmorMultiplierHeavy"`
 	ArmorMultiplierLight       int64   `json:"ArmorMultiplierLight"`
 	ArmorMultiplierMedium      int64   `json:"ArmorMultiplierMedium"`
-	ArmorMultiplierVehicle     int64   `json:"ArmorMultiplierVehicle"`
+	ArmorMultiplierVehicle     float64 `json:"ArmorMultiplierVehicle"`
 	GlobalDamageMultiplier     float64 `json:"GlobalDamageMultiplier"`
 	StructureMultiplierAssault int64   `json:"StructureMultiplierAssault"`
 	StructureMultiplierHeavy   int64   `json:"StructureMultiplierHeavy"`
 	StructureMultiplierLight   int64   `json:"StructureMultiplierLight"`
 	StructureMultiplierMedium  int64   `json:"StructureMultiplierMedium"`
-	StructureMultiplierVehicle int64   `json:"StructureMultiplierVehicle"`
+	StructureMultiplierVehicle float64 `json:"StructureMultiplierVehicle"`
 	TESTMechScaleMultiplier    float64 `json:"TEST_MechScaleMultiplier"`
 }
 
